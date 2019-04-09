@@ -1,69 +1,107 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-import HeaderRight from '../components/HeaderRight'
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 
+import {
+  AuthLoadingScreen,
+  AuthScreen
+} from '../screens/auth';
+import {
+  HomeScreen
+} from '../screens/home';
+import {
+  LineupScreen
+} from '../screens/lineup';
+import {
+  PlanningScreen,
+  MatchScreen
+} from '../screens/planning';
+import {
+  StratScreen,
+  MapScreen
+} from '../screens/strats';
+import {
+  ProfileScreen
+} from '../screens/profile';
+
+/*
+  HOME
+*/
 const HomeStack = createStackNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: (props) => ({
-      headerRight: <HeaderRight navigation={props.navigation} /> 
-    })
-  },
+  Home: HomeScreen,
 }, {
   initialRouteName: 'Home',
-  
-});
-
+})
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  )
+  tabBarLabel: 'Home'
 };
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+/*
+  LINEUP
+*/
+const LineupStack = createStackNavigator({
+  Lineup: LineupScreen,
+}, {
 });
-
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
+LineupStack.navigationOptions = {
+  tabBarLabel: 'Lineup',
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+/*
+  PLANNING
+*/
+const PlanningStack = createStackNavigator({
+  Planning: PlanningScreen,
+  Match: MatchScreen
+}, {
+  initialRouteName: 'Planning',
 });
+PlanningStack.navigationOptions = {
+  tabBarLabel: 'Planning',
+}
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
-  ),
+/*
+  STRATS
+*/
+const StratStack = createStackNavigator({
+  Strat: StratScreen,
+  Map: MapScreen
+}, {
+  initialRouteName: 'Strat',
+});
+StratStack.navigationOptions = {
+  tabBarLabel: 'Strats',
 };
+
+/*
+  PROFILE
+*/
+const ProfileStack = createStackNavigator({
+  Profile: ProfileScreen,
+}, {
+});
+ProfileStack.navigationOptions = {
+  tabBarLabel: 'Profile',
+};
+
+// const SettingsStack = createStackNavigator({
+//   Settings: SettingsScreen,
+// }, {
+//   tabBarLabel: 'Settings',
+//   tabBarIcon: ({ focused }) => (
+//     <TabBarIcon
+//       focused={focused}
+//       name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+//     />
+//   ),
+// });
 
 export default createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack,
+  LineupStack,
+  PlanningStack,
+  StratStack,
+  ProfileStack
 });

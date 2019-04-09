@@ -3,7 +3,7 @@ import { createAppContainer, createSwitchNavigator, createStackNavigator } from 
 
 import MainTabNavigator from './MainTabNavigator';
 import AuthStack from './AuthNavigator'
-import AuthLoadingScreen from '../screens/AuthLoadingScreen'
+import AuthLoadingScreen from '../screens/auth/AuthLoadingScreen'
 
 
 export default createAppContainer(createSwitchNavigator({

@@ -11,9 +11,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import { WebBrowser, Linking, AuthSession } from 'expo';
-import { withGlobalContext } from '../components/GlobalContext'
-
-import { MonoText } from '../components/StyledText';
+import { withGlobalContext } from '../../components/GlobalContext';
 
 class AuthScreen extends React.Component {
   static navigationOptions = {
