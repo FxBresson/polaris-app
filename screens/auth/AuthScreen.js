@@ -7,8 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Button,
-  AsyncStorage
+  Button
 } from 'react-native';
 import { WebBrowser, Linking, AuthSession } from 'expo';
 import { withGlobalContext } from '../../components/GlobalContext';
@@ -39,11 +38,17 @@ class AuthScreen extends React.Component {
   }
 
   handleRedirect = event => {
-    console.log('event =')
-    console.log(event)
-    this.removeLinkingListener()
+    Linking.removeEventListener('url', this.handleRedirect)
 
-    this.props.global.login('THISISFX')
+    let str = event.url.substring(event.url.indexOf('?')+1).split('&')
+    let params = {}, d = decodeURIComponent;
+    // march and parse
+    for (let pair of str) {
+      pair = pair.split('=')
+      params[d(pair[0])] = d(pair[1] || '');
+    }
+
+    this.props.global.login(params.token, params.user, true)
     this.props.navigation.navigate('Home')
     // WebBrowser.dismissBrowser()
   }
@@ -62,19 +67,18 @@ class AuthScreen extends React.Component {
       // let authResult = await AuthSession.startAsync({authUrl: authUrl})
       console.log('authResult =')
       console.log(authResult)
-      await AsyncStorage.setItem('userToken', 'THISISFX');
-      
+
     } catch (err) {
       console.log('ERROR:', err)
     }
   }
 
-  addLinkingListener = () => {
-    Linking.addEventListener('url', this.handleRedirect)
-  }
-  removeLinkingListener = () => {
-    Linking.removeEventListener('url', this.handleRedirect)
-  }
+  // addLinkingListener = () => {
+  //   Linking.addEventListener('url', this.handleRedirect)
+  // }
+  // removeLinkingListener = () => {
+  //   Linking.removeEventListener('url', this.handleRedirect)
+  // }
 
   render() {
     return (
