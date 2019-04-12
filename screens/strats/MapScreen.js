@@ -3,18 +3,41 @@ import { withGlobalContext } from '../../components/GlobalContext'
 import {
   ScrollView,
   StyleSheet,
+  Image
 } from 'react-native';
+import StratPhase from '../../components/strats/StratPhase';
 
 class MapScreen extends React.Component {
   static navigationOptions = {
     title: '',
   };
 
+  constructor(props) {
+    super(props)
+  }
+
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
+        <Image
+          source={{ uri: this.props.map.img }}
+        />
 
-      </ScrollView>
+        <View>
+          <Text>{this.props.map.name}</Text>
+          <Text>{this.props.comment}</Text>
+        </View>
+
+        <StratPhase
+          phaseName="Attack"
+          comps={this.props.compAttack}
+        />
+
+        <StratPhase
+          phaseName="Defense"
+          comps={this.props.compDefense}
+        />
+      </View>
     );
   }
 }
