@@ -1,8 +1,10 @@
 import React from 'react';
 import { withGlobalContext } from '../../components/GlobalContext'
 import {
-  ScrollView,
+  View,
   StyleSheet,
+  Button,
+  Text
 } from 'react-native';
 
 class ProfileScreen extends React.Component {
@@ -10,11 +12,20 @@ class ProfileScreen extends React.Component {
     title: 'Profile',
   };
 
-  render() {
-    return (
-      <ScrollView style={styles.container}>
+  constructor(props) {
+    super(props)
+  }
 
-      </ScrollView>
+  logout() {
+    this.props.global.logout(this.props.navigation)
+  }
+
+  render() {
+    
+    return (
+      <View style={styles.container}>
+        <Button onPress={() => this.logout()} title="Logout"></Button>
+      </View>
     );
   }
 }
