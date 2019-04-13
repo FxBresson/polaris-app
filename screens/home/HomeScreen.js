@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ScrollView,
+  View,
   StyleSheet,
   Text
 } from 'react-native';
@@ -12,7 +12,6 @@ class HomeScreen extends React.Component {
   };
 
   constructor(props, navigation) {
-    console.log(navigation)
     super(props);
     this.state = {
       dataSource: {}
@@ -20,16 +19,13 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    //this.fetchSecret()
   }
-
- 
 
   render() {
     return (
-      <ScrollView>
+      <View>
 
-      </ScrollView>
+      </View>
     );
   }
 }

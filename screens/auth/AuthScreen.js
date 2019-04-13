@@ -28,12 +28,6 @@ class AuthScreen extends React.Component {
 
   componentDidMount() {
     let scheme = 'nxet'
-    Linking.getInitialURL()
-      .then(url => {
-        console.log("App.js getInitialURL Triggered")
-        // this.handleOpenURL({ url });
-      })
-      .catch(error => console.error(error));
     Linking.addEventListener('url', this.handleRedirect);
   }
 
@@ -56,20 +50,14 @@ class AuthScreen extends React.Component {
   handleOAuthLogin = async () => {
     // gets the app's deep link
     let redirectUrl = await Linking.getInitialURL()
-    // console.log(redirectUrl)
-    console.log('starting')
 
     // this should change depending on where the server is running
     let authUrl = `https://polarisapi.serveo.net/auth/bnet?url=${encodeURIComponent(redirectUrl)}`
     
     try {
-      let authResult = await WebBrowser.openAuthSessionAsync(authUrl)
-      // let authResult = await AuthSession.startAsync({authUrl: authUrl})
-      console.log('authResult =')
-      console.log(authResult)
-
+      await WebBrowser.openAuthSessionAsync(authUrl)
     } catch (err) {
-      console.log('ERROR:', err)
+      console.error(err)
     }
   }
 

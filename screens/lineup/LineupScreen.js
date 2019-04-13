@@ -1,7 +1,7 @@
 import React from 'react';
 import { withGlobalContext } from '../../components/GlobalContext'
 import {
-  ScrollView,
+  View,
   StyleSheet,
 } from 'react-native';
 
@@ -12,9 +12,9 @@ class LineupScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
 
-      </ScrollView>
+      </View>
     );
   }
 }

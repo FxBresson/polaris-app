@@ -35,9 +35,11 @@ class AuthLoadingScreen extends React.Component {
     const userToken = await AsyncStorage.getItem('userToken');
     const userBtag = await AsyncStorage.getItem('mainBtag')
 
-    this.props.navigation.navigate(userToken ? 'Main' : 'Auth');
     if (userToken) {
+      this.props.navigation.navigate('Main');
       this.props.global.login(userToken, userBtag, false);
+    } else {
+      this.props.navigation.navigate('Auth');
     }
   };
 

@@ -22,7 +22,7 @@ query getLineup($id: MongoID!) {
 `
 
 export const getPlayer = `
-query GetPlayer($player: FilterFindOnePlayerInput) {
+query GetPlayer($player: FilterFindOnePlayerInput!) {
   playerOne(filter: $player) {
     _id
     mainBtag

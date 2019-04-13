@@ -6,14 +6,17 @@ import AppNavigator from './navigation/AppNavigator';
 import { GlobalContextProvider } from './components/GlobalContext'
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-    userToken: null
-  };
+
+  constructor() {
+    super()
+    this.state = {
+      isLoadingComplete: false,
+      userToken: null
+    };
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
-      console.log('loading')
       return (
         <AppLoading
           startAsync={this._loadResourcesAsync}
@@ -22,11 +25,12 @@ export default class App extends React.Component {
         />
       );
     } else {
-      console.log('finish loading')
       return (
         <GlobalContextProvider>
           <View style={styles.container}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            {Platform.OS === 'ios' && 
+              <StatusBar barStyle="default" />
+            }
             <AppNavigator />
           </View>
         </GlobalContextProvider>
