@@ -1,3 +1,5 @@
-export default {
-  API_URL: 'http://polaris.serveo.net'
+const API_URL = 'https://polarisapi.serveo.net'
+
+export {
+  API_URL
 }
