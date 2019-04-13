@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, RefreshControl, AsyncStorage} from 'react-native';
 import { API_URL } from '../config';
-import { GraphQLClient } from 'graphql-request'
+import { GraphQLClient, request } from 'graphql-request'
 import {
   getLineup,
   getPlayer
@@ -15,57 +15,62 @@ export class GlobalContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: { dummyData: 'DUMMY' },
       refreshing: false,
+      userToken: null,
+      user: null,
+      lineupId: null,
+      lineup: null
     }
-
-    this.client = new GraphQLClient(`${API_URL}/graphql`, {
-      headers: {
-        authorization: `jwt ${this.state.userToken}`,
-      },
-    })
   }
  
   async login(token, btag, newLogin) {
     if (newLogin) {
       AsyncStorage.setItem('userToken', token);
-      AsyncStorage.setItem('mainBtag', mainBtag);
+      AsyncStorage.setItem('mainBtag', btag);
     }
     const variables = {
       player: {
         mainBtag: btag
       }
     }
-    await this.setState({ userToken: token })
-    const user = await this.client.request(getPlayer, variables)
-    await this.setState({ user: user, lineup: user.lineup})
+    this.client = new GraphQLClient(`${API_URL}/graphql`, {
+      headers: {
+        Authorization: `jwt ${token}`,
+      },
+    })
+
+
+    try {
+      const user = await this.client.request(getPlayer, variables)
+      await this.setState({ userToken: token, user: user.playerOne, lineupId: user.playerOne.lineup})
+      await this.getLineupData();
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   logout(navigation) {
     AsyncStorage.removeItem('userToken')
     AsyncStorage.removeItem('mainBtag')
-    this.setState({ userToken: null, user: null, lineup: null }, () => { navigation.navigate('Auth') })
+    this.setState({ userToken: null, user: null, lineupId: null }, () => { navigation.navigate('Auth') })
   }
 
-  async fetchLineupData() {
+  async changeLineup(lineupId) {
+    await this.setState({ lineupId: lineupId })
+    await this.refreshData()
+  }
+
+
+  async getLineupData() {
     const variables = {
-      id: this.state.lineup
+      id: this.state.lineupId
     }
-    try {
-      const data = await this.client.request(getLineup, variables)
-      return data;
-    } catch(err) {
-      console.log(err)
-      return err
-    }
-  }
 
-  async refreshData() {
     try {
-      let lineupData = await this.fetchLineupData()
-      return await this.setState({ lineup: lineupData });
+      let lineupData = await this.client.request(getLineup, variables)
+      return await this.setState({ lineup: lineupData.lineupById });
     } catch(err) {
-      console.log('could not reload data')
+      console.error('could not reload data')
     }
   }
 
@@ -73,10 +78,10 @@ export class GlobalContextProvider extends React.Component {
     return (
       <GlobalContext.Provider
         value={{
-          ...this.state.value,
+          ...this.state,
           login: (token, btag, newLogin) => this.login(token, btag, newLogin),
           logout: (navigation) => this.logout(navigation),
-          refreshData: () => this.refreshData()
+          refreshData: () => this.getLineupData()
         }}
       >
         {this.props.children}
@@ -91,7 +96,6 @@ export function withGlobalContext(Component) {
 
     constructor(props) {
       super(props)
-      console.log(GlobalContext._currentValue.fetchLineupData)
       this.state = {
         refreshing: false
       }
@@ -100,7 +104,7 @@ export function withGlobalContext(Component) {
     async _onRefresh() {
       await this.setState({ refreshing: true });
       try {
-        await GlobalContext._currentValue.fetchLineupData()
+        await GlobalContext._currentValue.getLineupData()
       } catch(err) {
 
       }
