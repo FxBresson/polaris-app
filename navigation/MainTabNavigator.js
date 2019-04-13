@@ -6,7 +6,6 @@ import TabBarIcon from '../components/TabBarIcon';
 
 import {
   AuthLoadingScreen,
-  AuthScreen
 } from '../screens/auth';
 import {
   HomeScreen

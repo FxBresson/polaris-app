@@ -42,9 +42,9 @@ export class GlobalContextProvider extends React.Component {
 
     try {
       const user = await this.client.request(getPlayer, variables)
-      await this.setState({ userToken: token, user: user.playerOne, lineupId: user.playerOne.lineup})
-      await this.getLineupData();
+      return await this.setState({ userToken: token, user: user.playerOne, lineupId: user.playerOne.lineup})
     } catch (err) {
+      return false
       console.error(err)
     }
   }
@@ -57,7 +57,7 @@ export class GlobalContextProvider extends React.Component {
 
   async changeLineup(lineupId) {
     await this.setState({ lineupId: lineupId })
-    await this.refreshData()
+    await this.getLineupData()
   }
 
 
@@ -65,12 +65,12 @@ export class GlobalContextProvider extends React.Component {
     const variables = {
       id: this.state.lineupId
     }
-
     try {
       let lineupData = await this.client.request(getLineup, variables)
       return await this.setState({ lineup: lineupData.lineupById });
     } catch(err) {
       console.error('could not reload data')
+      return false
     }
   }
 
@@ -79,9 +79,9 @@ export class GlobalContextProvider extends React.Component {
       <GlobalContext.Provider
         value={{
           ...this.state,
-          login: (token, btag, newLogin) => this.login(token, btag, newLogin),
+          login: async (token, btag, newLogin) => await this.login(token, btag, newLogin),
           logout: (navigation) => this.logout(navigation),
-          refreshData: () => this.getLineupData()
+          refreshData: async () => await this.getLineupData()
         }}
       >
         {this.props.children}
