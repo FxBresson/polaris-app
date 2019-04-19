@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
 import Swiper from 'react-native-swiper';
 import { Avatar } from 'react-native-elements';
 
@@ -14,12 +14,12 @@ export default class StratPhase extends Component {
       <View>
         <Text>{this.props.phaseName}</Text>
           <Swiper style={styles.wrapper} showsButtons={true}>
-            {this.props.comps.map((i, comp) => {
+            {this.props.comps.map((comp, i) => {
               return (
                 <View style={styles.slide} key={i}>
                   <Text>{comp.name}</Text>
                   <View>
-                    {comp.comp.map((j, charac) => {
+                    {comp.characters.map((charac, j) => {
                       return(
                         <Avatar
                           rounded
@@ -31,6 +31,13 @@ export default class StratPhase extends Component {
                 </View>
               )
             })}
+            <View style={styles.slide}>
+              <TouchableOpacity
+                
+              >
+                <Text>+</Text>
+              </TouchableOpacity>
+            </View>
         </Swiper>
       </View>
     )

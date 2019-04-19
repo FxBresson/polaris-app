@@ -2,19 +2,17 @@ import React from 'react';
 import { withGlobalContext } from '../../components/GlobalContext';
 import {
   ScrollView,
+  View,
   StyleSheet,
+  FlatList
 } from 'react-native';
-import TabButton from '../../components/TabButton';
+import TabButton from '../../components/TabButton';
 import MapItem from '../../components/strats/MapItem';
 
 class StratScreen extends React.Component {
   static navigationOptions = {
     title: 'Strats',
   };
-
-  assaultEscort
-  escort
-  control
 
   constructor(props) {
     super(props)
@@ -23,12 +21,25 @@ class StratScreen extends React.Component {
     }
   }
 
+  _keyExtractor = (item, index) => item._id;
+
   selectMapType(mapType) {
     this.setState({mapType: mapType})
   }
 
+  async goToMapStrat(mapId) {
+    let strat = this.props.global.lineup.strats.find(strat => strat.map === mapId)
+    if(!strat) {
+      //Add Strat
+      await this.props.global.addStrat(mapId)
+    }
+    this.props.navigation.navigate('Map', {
+      mapId: mapId,
+    });
+  }
+
   render() {
-    const mapsData = this.props.global.lineup.strats.filter(strat => strat.map.type === this.state.mapType)
+    const mapsData = this.props.global.maps.filter(map => map.mapTypes.includes(this.state.mapType))
 
     return (
       <View style={styles.container}>
@@ -58,11 +69,13 @@ class StratScreen extends React.Component {
 
         <FlatList
           data={mapsData}
-          renderItem={
-            ({map}) => (
-              <MapItem {...map} />
-            )
-          }
+          keyExtractor={this._keyExtractor}
+          renderItem={({item}) => (
+            <MapItem 
+              {...item} 
+              onPress={() => this.goToMapStrat(item._id)} 
+            />
+          )}
         />
 
       </View>

@@ -3,7 +3,9 @@ import { withGlobalContext } from '../../components/GlobalContext'
 import {
   ScrollView,
   StyleSheet,
-  Image
+  Image,
+  View,
+  Text
 } from 'react-native';
 import StratPhase from '../../components/strats/StratPhase';
 
@@ -14,28 +16,39 @@ class MapScreen extends React.Component {
 
   constructor(props) {
     super(props)
+    
   }
 
+  
+
   render() {
+    const mapId = this.props.navigation.getParam('mapId');
+    const map = this.props.global.maps.find(map => map._id === mapId)
+    let strat = this.props.global.lineup.strats.find(strat => strat.map === mapId)
+
     return (
       <View style={styles.container}>
         <Image
-          source={{ uri: this.props.map.img }}
+          source={{ uri: map.thumbnail }}
+          style={styles.hero}
+          resizeMode="cover"
         />
 
         <View>
-          <Text>{this.props.map.name}</Text>
-          <Text>{this.props.comment}</Text>
+          <Text>{map.name}</Text>
+          <Text>{strat.comments}</Text>
         </View>
+
 
         <StratPhase
           phaseName="Attack"
-          comps={this.props.compAttack}
+          comps={strat.comps.filter(comp => !comp.isDefense)}
         />
 
+        {map.mapTypes.includes('escort')}
         <StratPhase
           phaseName="Defense"
-          comps={this.props.compDefense}
+          comps={strat.comps.filter(comp => comp.isDefense)}
         />
       </View>
     );
@@ -50,5 +63,10 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       paddingTop: 80,
     },
+    hero: {
+      flex: 1,
+      width: undefined,
+      height: undefined
+    }
   });
   

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, TouchableOpacity, Avatar, Image } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import { Avatar } from 'react-native-elements'
 
 export default class MapItem extends Component {
 
@@ -10,34 +11,37 @@ export default class MapItem extends Component {
   render() {
     return (
       <TouchableOpacity
-        onPress={() => {
-          this.props.navigation.navigate('Map', {
-            mapId: this.props._id,
-          });
-        }}
+        onPress={this.props.onPress}
       >
         <Avatar
           rounded
-          source={{uri:props.image}}
+          source={{uri: this.props.thumbnail}}
         />
         <View>
           <View>
             <Image 
               source={{uri: this.props.flagUrl}}
+              style={styles.flag}
+              resizeMode="contain"
             />
-            <Text>{this.props.mapName}</Text>
+            <Text>{this.props.name}</Text>
           </View>
-          <View>
+          {/* <View>
             {this.props.defense ? 
               <Text>{this.props.attack} Attack Comps - {this.props.defense} Defense Comps</Text>
             :
               <Text>{this.props.attack} Comps</Text>
             }
-          </View>
+          </View> */}
         </View>
       </TouchableOpacity>
     )
   }
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  flag: {
+    width: undefined,
+    height: 25
+  }
+})

@@ -4,7 +4,10 @@ import { API_URL } from '../config';
 import { GraphQLClient, request } from 'graphql-request'
 import {
   getLineup,
-  getPlayer
+  getPlayer,
+  getMaps,
+  updatePlayer,
+  addStrat
 } from '../helpers/queries';
 
 export const GlobalContext = React.createContext();
@@ -19,7 +22,8 @@ export class GlobalContextProvider extends React.Component {
       userToken: null,
       user: null,
       lineupId: null,
-      lineup: null
+      lineup: null,
+      maps: null
     }
   }
  
@@ -44,8 +48,8 @@ export class GlobalContextProvider extends React.Component {
       const user = await this.client.request(getPlayer, variables)
       return await this.setState({ userToken: token, user: user.playerOne, lineupId: user.playerOne.lineup})
     } catch (err) {
-      return false
       console.error(err)
+      return false
     }
   }
 
@@ -60,7 +64,6 @@ export class GlobalContextProvider extends React.Component {
     await this.getLineupData()
   }
 
-
   async getLineupData() {
     const variables = {
       id: this.state.lineupId
@@ -69,9 +72,52 @@ export class GlobalContextProvider extends React.Component {
       let lineupData = await this.client.request(getLineup, variables)
       return await this.setState({ lineup: lineupData.lineupById });
     } catch(err) {
-      console.error('could not reload data')
+      console.log(err)
       return false
     }
+  }
+
+  async getGameData() {
+    try {
+      let maps = await this.client.request(getMaps)
+      return await this.setState({ maps: maps.mapsMany})
+    } catch(err) {
+      console.log(err)
+      return false
+    }
+  }
+
+  async updatePlayerData(newUserObj) {
+    try {
+      let userObj = await this.client.request(updatePlayer, {record: newUserObj})
+      return await this.setState({ user: userObj.playerUpdateById.record });
+    } catch(err) {
+      console.error(err)
+      return false
+    }
+  }
+
+  async updateLineupData() {
+
+  }
+  
+
+  async addStrat(mapId) {
+    const variables = {
+      record: {
+        lineup: this.state.lineupId,
+        map: mapId
+      }
+    }
+    try {
+      let strat = await this.client.request(addStrat, variables)
+      let lineup = this.state.lineup
+      lineup.strats.push(strat.stratCreateOne.record)
+      return await this.setState({lineup: lineup });
+    } catch(err) {
+      console.error(err)
+      return false
+    } 
   }
 
   render() {
@@ -81,7 +127,10 @@ export class GlobalContextProvider extends React.Component {
           ...this.state,
           login: async (token, btag, newLogin) => await this.login(token, btag, newLogin),
           logout: (navigation) => this.logout(navigation),
-          refreshData: async () => await this.getLineupData()
+          refreshData: async () => await this.getLineupData(),
+          getGameData: async () => await this.getGameData(),
+          updatePlayerData: async (newUserObj) => await this.updatePlayerData(newUserObj),
+          addStrat: async (mapId) => await this.addStrat(mapId)
         }}
       >
         {this.props.children}
