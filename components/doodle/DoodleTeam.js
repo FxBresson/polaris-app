@@ -25,12 +25,13 @@ export default class DoodleTeam extends Component {
         </TouchableOpacity>
         {this.state.isExpanded && 
           <View>
-            {this.props.week.entries.map((i, entry) => {
+            {this.props.teamValue.map((player, i) => {
+              console.log(i)
               return (
                 <DoodleLine 
                   key={i}
-                  name={entry[0]}
-                  weekDispo={entry[1]}
+                  name={player.mainBtag}
+                  weekAvailability={player.doodle}
                 />
               )
             })}

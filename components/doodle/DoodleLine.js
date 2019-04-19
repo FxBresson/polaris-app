@@ -12,12 +12,15 @@ export default class DoodleLine extends Component {
     return (
       <View>
         <Text>{this.props.name}</Text>
-        {this.props.weekDispo.map((i, dispo) => {
-          <DoodleCheckbox
-            key={i}
-            dispoState={dispo}
-            onStateChange={(newStatus) => this.props.onStateChange(newStatus, i)}
-          />
+        {this.props.weekAvailability.map((dispo, i) => {
+          return (
+            <DoodleCheckbox
+              touchable={this.props.touchable}
+              key={i}
+              dispoState={dispo}
+              onStateChange={(newStatus) => this.props.onStateChange(newStatus, (i+this.props.weekIndex))}
+            />
+          )
         })}
       </View>
     )

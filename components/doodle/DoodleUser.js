@@ -12,23 +12,22 @@ export default class DoodleUser extends Component {
     super(props)
   }
 
-  updateDoodle(newStatus, dayOfWeek) {
-    
-  }
 
   render() {
     return (
       <View>
         <Text>S{this.props.weekNumber}</Text>
-        {moment.weekdaysMin().map((i, dayName) => {
+        {moment.weekdaysMin().map((dayName, i) => {
           return (
             <Text key={i}>{dayName}</Text>
           )
         })}
         <DoodleLine 
+          touchable={true}
           name={this.props.name}
-          weekDispo={this.props.weekDispo}
-          onStateChange={(newStatus, index) => this.updateDoodle(newStatus, index)}
+          weekIndex={this.props.weekIndex}
+          weekAvailability={this.props.weekAvailability}
+          onStateChange={(newStatus, i) => this.props.updateDoodle(newStatus, i)}
         />
       </View>
     )

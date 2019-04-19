@@ -64,9 +64,9 @@ class MatchScreen extends React.Component {
           <Text>{ennemyScore}</Text>
         </View>
 
-        {this.state.result.map((i, result) => {
+        {this.state.result.map((result, i) => {
           return (
-            <View>
+            <View key={i}>
               <Text>{result.score}</Text>
               <Tile
                 imageSrc={{uri: result.map.image}}

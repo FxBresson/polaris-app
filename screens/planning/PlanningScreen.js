@@ -39,17 +39,29 @@ class PlanningScreen extends React.Component {
     this.setState({ isOverlayVisible: true })
   }
 
+  updateDoodle(newStatus, dayOfWeek) {
+    let newUserObj = {
+      _id: this.props.global.user._id,
+      doodle: this.props.global.user.doodle
+    }
+    newUserObj.doodle[dayOfWeek] = newStatus
+    this.props.global.updatePlayerData(newUserObj)
+  }
+
   render() {    
-    const matchsData = this.state.isMatchListHistory ? this.props.global.pastMatchs : this.props.global.futurMatchs
+    const matchsData = this.state.isMatchListHistory ? this.props.global.lineup.matchHistory : this.props.global.lineup.matchSchedule
     const date = moment()
 
-    const thisWeekTeamValue = this.props.global.lineup.planning.doodle[date.year()][date.week()]
-    const thisWeekUserValue = thisWeekTeamValue[this.props.global.user.mainBtag]
-    delete thisWeekTeamValue[this.props.global.user.mainBtag]
+    let thisWeekTeamValue = this.props.global.lineup.players.map(player => ({
+      mainBtag: player.mainBtag,
+      doodle: player.doodle.slice(7, 14)
+    }))
+    let nextWeekTeamValue = this.props.global.lineup.players.map(player => ({
+      mainBtag: player.mainBtag,
+      doodle: player.doodle.slice(14, 21)
+    }))
 
-    const nextWeekTeamValue = this.props.global.lineup.planning.doodle[date.year()][(date.week()+1)]
-    const nextWeekUserValue = nextWeekTeamValue[this.props.global.user.mainBtag]
-    delete nextWeekTeamValue[this.props.global.user.mainBtag]
+    console.log(this.props.global.user.doodle)
 
     return (
       <View style={styles.container}>
@@ -70,10 +82,12 @@ class PlanningScreen extends React.Component {
             <DoodleUser 
               weekNumber={date.week()}
               name={this.props.global.user.mainBtag}
-              weekDispo={thisWeekUserValue}
+              weekIndex={7}
+              weekAvailability={this.props.global.user.doodle.slice(7, 14)}
+              updateDoodle={(newStatus, i) => this.updateDoodle(newStatus, i)}
             />
             <DoodleTeam 
-              week={thisWeekTeamValue}
+              teamValue={thisWeekTeamValue}
             />  
           </View>  
 
@@ -81,10 +95,12 @@ class PlanningScreen extends React.Component {
             <DoodleUser 
               weekNumber={(date.week()+1)}
               name={this.props.global.user.mainBtag}
-              weekDispo={nextWeekUserValue}
+              weekIndex={14}
+              weekAvailability={this.props.global.user.doodle.slice(14, 21)}
+              updateDoodle={(newStatus, i) => this.updateDoodle(newStatus, i)}
             />
             <DoodleTeam 
-              week={nextWeekTeamValue}
+              teamValue={nextWeekTeamValue}
             />  
           </View>    
           
