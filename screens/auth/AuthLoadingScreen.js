@@ -106,6 +106,7 @@ class AuthLoadingScreen extends React.Component {
     await this.setState({ needLogin: false, isNewLogin: newLogin })
     await this.props.global.login(token, user, newLogin)
     await this.props.global.refreshData()
+    await this.props.global.getGameData()
     this.props.navigation.navigate('Main')
   }
 

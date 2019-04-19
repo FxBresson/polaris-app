@@ -5,9 +5,6 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 
 import {
-  AuthLoadingScreen,
-} from '../screens/auth';
-import {
   HomeScreen
 } from '../screens/home';
 import {
