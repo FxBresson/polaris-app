@@ -59,10 +59,9 @@ class AuthLoadingScreen extends React.Component {
 
   async _loadToken() {
     const userToken = await AsyncStorage.getItem('userToken');
-    const userBtag = await AsyncStorage.getItem('mainBtag')
 
     if (userToken) {
-      this._loadDataAsync(userToken, userBtag, false)
+      this._loadDataAsync(userToken, false)
     } else {
       this.setState({ needLogin: true })
       Linking.addEventListener('url', this.handleRedirect);
@@ -95,16 +94,16 @@ class AuthLoadingScreen extends React.Component {
     }
 
     try {
-      this._loadDataAsync(params.token, params.user, true)
+      this._loadDataAsync(params.token, true)
     } catch(err) {
       console.error(err)
       this.setState({ error: true })
     }
   }
 
-  async _loadDataAsync(token, user, newLogin) {
+  async _loadDataAsync(token, newLogin) {
     await this.setState({ needLogin: false, isNewLogin: newLogin })
-    await this.props.global.login(token, user, newLogin)
+    await this.props.global.login(token, newLogin)
     await this.props.global.refreshData()
     await this.props.global.getGameData()
     this.props.navigation.navigate('Main')

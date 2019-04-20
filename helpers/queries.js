@@ -1,25 +1,27 @@
 const stratObj = `
-_id
-map
-comments
-comps {
-  name
-  isDefense
-  characters
-}
+  _id
+  map
+  comments
+  comps {
+    name
+    isDefense
+    characters
+  }
 `
 
 const playerObj = `
-_id
-mainBtag
-lineup
-status
-role {
-name
-}
-doodle
+  _id
+  mainBtag
+  name
+  lineup
+  status
+  doodle
+  role {
+    name
+  }
 `
 
+/* LINEUP */
 export const getLineup = `
 query getLineUp($id: MongoID!) {
   lineupById(_id: $id) {
@@ -29,7 +31,12 @@ query getLineUp($id: MongoID!) {
     objectives
     players {
       mainBtag
-      doodle
+      name,
+      status,
+      doodle,
+      role {
+        name
+      }
     }
     strats {
 ${stratObj}
@@ -44,10 +51,37 @@ ${stratObj}
 }
 `
 
+/* PLAYER */
 export const getPlayer = `
 query getPlayer($player: FilterFindOnePlayerInput!) {
   playerOne(filter: $player) {
 ${playerObj}
+  }
+}
+`
+
+export const loginPlayer = `
+query {
+  playerLogin {
+    _id
+    mainBtag
+    name
+    lineup
+    status
+    doodle
+    role {
+      name
+    }
+    profile {
+      level
+      portrait
+      endorsement
+      rank
+      rank_img
+      levelFrame
+      levelStars
+    }
+    lastStats
   }
 }
 `
@@ -62,8 +96,7 @@ ${playerObj}
 }
 `
 
-
-
+/* DATA */
 export const getMaps = `
 query getMaps {
   mapsMany {
@@ -76,11 +109,32 @@ query getMaps {
 }
 `
 
+/* STRAT */
 export const addStrat = `
 mutation addStrat($record: CreateOneStratInput!) {
   stratCreateOne(record: $record) {
     record {
 ${stratObj}
+    }
+  }
+}
+`
+
+/* MATCH */ 
+export const createMatch = `
+mutation createMatch($record: CreateOneMatchInput!) {
+  matchCreateOne(record: $record) {
+    record {
+      _id
+      date
+      type
+      result {
+        map
+        score
+        enemyScore
+      }
+      sr
+      teamSr
     }
   }
 }

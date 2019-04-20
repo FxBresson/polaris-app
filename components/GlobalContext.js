@@ -5,6 +5,7 @@ import { GraphQLClient, request } from 'graphql-request'
 import {
   getLineup,
   getPlayer,
+  loginPlayer,
   getMaps,
   updatePlayer,
   addStrat
@@ -27,15 +28,9 @@ export class GlobalContextProvider extends React.Component {
     }
   }
  
-  async login(token, btag, newLogin) {
+  async login(token, newLogin) {
     if (newLogin) {
       AsyncStorage.setItem('userToken', token);
-      AsyncStorage.setItem('mainBtag', btag);
-    }
-    const variables = {
-      player: {
-        mainBtag: btag
-      }
     }
     this.client = new GraphQLClient(`${API_URL}/graphql`, {
       headers: {
@@ -45,8 +40,8 @@ export class GlobalContextProvider extends React.Component {
 
 
     try {
-      const user = await this.client.request(getPlayer, variables)
-      return await this.setState({ userToken: token, user: user.playerOne, lineupId: user.playerOne.lineup})
+      const user = await this.client.request(loginPlayer, variables)
+      return await this.setState({ userToken: token, user: user.playerLogin, lineupId: user.playerLogin.lineup})
     } catch (err) {
       console.error(err)
       return false
@@ -101,7 +96,6 @@ export class GlobalContextProvider extends React.Component {
 
   }
   
-
   async addStrat(mapId) {
     const variables = {
       record: {
@@ -125,7 +119,7 @@ export class GlobalContextProvider extends React.Component {
       <GlobalContext.Provider
         value={{
           ...this.state,
-          login: async (token, btag, newLogin) => await this.login(token, btag, newLogin),
+          login: async (token, newLogin) => await this.login(token, newLogin),
           logout: (navigation) => this.logout(navigation),
           refreshData: async () => await this.getLineupData(),
           getGameData: async () => await this.getGameData(),
