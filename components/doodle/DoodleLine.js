@@ -10,7 +10,7 @@ export default class DoodleLine extends Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.line}>
         <Text>{this.props.name}</Text>
         {this.props.weekAvailability.map((dispo, i) => {
           return (
@@ -27,4 +27,8 @@ export default class DoodleLine extends Component {
   }
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  line: {
+    flexDirection: 'row'
+  }
+})

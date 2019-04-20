@@ -26,7 +26,6 @@ export default class DoodleTeam extends Component {
         {this.state.isExpanded && 
           <View>
             {this.props.teamValue.map((player, i) => {
-              console.log(i)
               return (
                 <DoodleLine 
                   key={i}

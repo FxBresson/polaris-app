@@ -16,12 +16,14 @@ export default class DoodleUser extends Component {
   render() {
     return (
       <View>
-        <Text>S{this.props.weekNumber}</Text>
-        {moment.weekdaysMin().map((dayName, i) => {
-          return (
-            <Text key={i}>{dayName}</Text>
-          )
-        })}
+        <View>
+          <Text>S{this.props.weekNumber}</Text>
+          {moment.weekdaysMin().map((dayName, i) => {
+            return (
+              <Text key={i}>{dayName}</Text>
+            )
+          })}
+        </View>
         <DoodleLine 
           touchable={true}
           name={this.props.name}
@@ -34,4 +36,6 @@ export default class DoodleUser extends Component {
   }
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+
+})
