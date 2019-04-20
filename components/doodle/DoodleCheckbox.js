@@ -4,23 +4,20 @@ import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
 export default class DoodleCheckbox extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      status: this.props.dispoState
-    }
   }
 
   toggleStatus() {
     let newStatus = 0
-    console.log(this.state.status)
-    if(this.state.status === 0) {
+    console.log(this.props.dispoState)
+    if(this.props.dispoState === 0) {
       newStatus = 1
-    } else if (this.state.status === 1) {
+    } else if (this.props.dispoState === 1) {
       newStatus = 2
-    } else if (this.state.status === 2) {
+    } else if (this.props.dispoState === 2) {
       newStatus = 0
     }
     console.log(newStatus)
-    this.setState({status: newStatus})
+    // this.setState({status: newStatus})
     this.props.onStateChange(newStatus)
   }
 
@@ -28,11 +25,11 @@ export default class DoodleCheckbox extends Component {
 
   render() {
     let checkboxStyle = []
-    if(this.state.status === 0) {
+    if(this.props.dispoState === 0) {
       checkboxStyle = StyleSheet.flatten([styles.checkboxDefault, styles.no])  
-    } else if (this.state.status === 1) {
+    } else if (this.props.dispoState === 1) {
       checkboxStyle = StyleSheet.flatten([styles.checkboxDefault, styles.yes])  
-    } else if (this.state.status === 2) {
+    } else if (this.props.dispoState === 2) {
       checkboxStyle = StyleSheet.flatten([styles.checkboxDefault, styles.maybe])  
     }
 
@@ -42,6 +39,7 @@ export default class DoodleCheckbox extends Component {
               onPress={() => this.toggleStatus()}
           >
               <View style={checkboxStyle}></View>
+
           </TouchableOpacity>
         :
           <View style={checkboxStyle}></View>
