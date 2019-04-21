@@ -109,23 +109,20 @@ class PlanningScreen extends React.Component {
         <View>
           <TabButton
             title="Prochains Matchs"
-            selected={!this.isMatchListHistory}
+            selected={!this.state.isMatchListHistory}
             onPress={() => this.matchDataHistory(false)}
           />
           <TabButton
             title="Matchs passés"
-            selected={this.isMatchListHistory}
+            selected={this.state.isMatchListHistory}
             onPress={() => this.matchDataHistory(true)}
           />
         </View>
 
         <FlatList
           data={matchsData}
-          renderItem={
-            ({match}) => (
-              <MatchItem {...match} />
-            )
-          }
+          renderItem={({item}) => <MatchItem {...item} navigation={this.props.navigation} />}
+          keyExtractor={(item, index) => item._id}
         />
 
         {!this.state.isMatchListHistory &&

@@ -8,7 +8,6 @@ export default class DoodleCheckbox extends Component {
 
   toggleStatus() {
     let newStatus = 0
-    console.log(this.props.dispoState)
     if(this.props.dispoState === 0) {
       newStatus = 1
     } else if (this.props.dispoState === 1) {
@@ -16,7 +15,6 @@ export default class DoodleCheckbox extends Component {
     } else if (this.props.dispoState === 2) {
       newStatus = 0
     }
-    console.log(newStatus)
     // this.setState({status: newStatus})
     this.props.onStateChange(newStatus)
   }
