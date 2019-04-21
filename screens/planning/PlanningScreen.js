@@ -137,7 +137,7 @@ class PlanningScreen extends React.Component {
             <Text>Mes disponibilités</Text>
             <DoodleUser 
               weekNumber={date.week()}
-              name={this.props.global.user.mainBtag}
+              name={this.props.global.user.name}
               weekIndex={7}
               weekAvailability={this.props.global.user.doodle.slice(7, 14)}
               updateDoodle={(newStatus, i) => this.updateDoodle(newStatus, i)}
@@ -150,7 +150,7 @@ class PlanningScreen extends React.Component {
           <View>
             <DoodleUser 
               weekNumber={(date.week()+1)}
-              name={this.props.global.user.mainBtag}
+              name={this.props.global.user.name}
               weekIndex={14}
               weekAvailability={this.props.global.user.doodle.slice(14, 21)}
               updateDoodle={(newStatus, i) => this.updateDoodle(newStatus, i)}

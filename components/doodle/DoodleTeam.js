@@ -29,7 +29,7 @@ export default class DoodleTeam extends Component {
               return (
                 <DoodleLine 
                   key={i}
-                  name={player.mainBtag}
+                  name={player.name}
                   weekAvailability={player.doodle}
                 />
               )
