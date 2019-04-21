@@ -1,14 +1,17 @@
 import React from 'react';
 import { ScrollView, RefreshControl, AsyncStorage} from 'react-native';
+
 import { API_URL } from '../config';
-import { GraphQLClient, request } from 'graphql-request'
+import { GraphQLClient } from 'graphql-request';
+
 import {
-  getLineup,
-  getPlayer,
-  loginPlayer,
-  getMaps,
-  updatePlayer,
-  addStrat
+  ADD_STRAT,
+  CREATE_MATCH,
+  GET_LINEUP,
+  GET_MAPS,
+  GET_PLAYER,
+  LOGIN_PLAYER,
+  UPDATE_PLAYER
 } from '../helpers/queries';
 
 export const GlobalContext = React.createContext();
@@ -26,21 +29,22 @@ export class GlobalContextProvider extends React.Component {
       lineup: null,
       maps: null
     }
+
   }
  
   async login(token, newLogin) {
     if (newLogin) {
       AsyncStorage.setItem('userToken', token);
     }
+    
     this.client = new GraphQLClient(`${API_URL}/graphql`, {
       headers: {
         Authorization: `jwt ${token}`,
       },
     })
 
-
     try {
-      const user = await this.client.request(loginPlayer, variables)
+      const user = await this.client.request(LOGIN_PLAYER)
       return await this.setState({ userToken: token, user: user.playerLogin, lineupId: user.playerLogin.lineup})
     } catch (err) {
       console.error(err)
@@ -48,71 +52,89 @@ export class GlobalContextProvider extends React.Component {
     }
   }
 
-  logout(navigation) {
+  async logout(navigation) {
     AsyncStorage.removeItem('userToken')
     AsyncStorage.removeItem('mainBtag')
-    this.setState({ userToken: null, user: null, lineupId: null }, () => { navigation.navigate('Auth') })
+    await this.setState({ userToken: null, user: null, lineupId: null });
+    navigation.navigate('Auth');
   }
 
   async changeLineup(lineupId) {
     await this.setState({ lineupId: lineupId })
-    await this.getLineupData()
+    await this.requester(GET_LINEUP)
   }
 
-  async getLineupData() {
-    const variables = {
-      id: this.state.lineupId
-    }
+  async requester(action, param = {}) {
+    const newState = await this.getNewState(action, param)
+    this.setState({
+      ...this.state,
+      ...newState
+    })
+  }
+
+  async getNewState(action, param = {}) {
+    let variables = {}
+    let lineup = this.state.lineup
     try {
-      let lineupData = await this.client.request(getLineup, variables)
-      return await this.setState({ lineup: lineupData.lineupById });
-    } catch(err) {
-      console.log(err)
-      return false
-    }
-  }
-
-  async getGameData() {
-    try {
-      let maps = await this.client.request(getMaps)
-      return await this.setState({ maps: maps.mapsMany})
-    } catch(err) {
-      console.log(err)
-      return false
-    }
-  }
-
-  async updatePlayerData(newUserObj) {
-    try {
-      let userObj = await this.client.request(updatePlayer, {record: newUserObj})
-      return await this.setState({ user: userObj.playerUpdateById.record });
-    } catch(err) {
-      console.error(err)
-      return false
-    }
-  }
-
-  async updateLineupData() {
-
-  }
-  
-  async addStrat(mapId) {
-    const variables = {
-      record: {
-        lineup: this.state.lineupId,
-        map: mapId
+      switch (action) {
+        case GET_MAPS:
+          
+          let maps = await this.client.request(GET_MAPS)
+          return { maps: maps.mapsMany}
+        
+        case GET_LINEUP:
+          variables = {
+            id: this.state.lineupId
+          }
+          let lineupData = await this.client.request(GET_LINEUP, variables)
+          return { lineup: lineupData.lineupById };
+        
+        case 'UPDATE_LINEUP':
+          return null
+          break;
+        
+        case 'GET_PLAYER':
+          return null
+        
+        case UPDATE_PLAYER:
+          variables = {
+            record: {
+              ...param
+            }
+          }
+          let userObj = await this.client.request(UPDATE_PLAYER, variables)
+          return { user: userObj.playerUpdateById.record };
+        
+        case ADD_STRAT:
+          variables = {
+            record: {
+              lineup: this.state.lineupId,
+              ...param
+            }
+          }
+          let strat = await this.client.request(ADD_STRAT, variables)
+          lineup.strats.push(strat.stratCreateOne.record)
+          return { lineup: lineup };
+                
+        case CREATE_MATCH: 
+          variables = {
+            record: {
+              lineup: this.state.lineupId,
+              ...param
+            }
+          }
+          let match = await this.client.request(CREATE_MATCH, variables)
+          let lineup = await this.getNewState(GET_LINEUP)
+          return lineup
+        default:
+          break;
       }
-    }
-    try {
-      let strat = await this.client.request(addStrat, variables)
-      let lineup = this.state.lineup
-      lineup.strats.push(strat.stratCreateOne.record)
-      return await this.setState({lineup: lineup });
     } catch(err) {
       console.error(err)
-      return false
-    } 
+      return null;
+    }
   }
+ 
 
   render() {
     return (
@@ -121,10 +143,7 @@ export class GlobalContextProvider extends React.Component {
           ...this.state,
           login: async (token, newLogin) => await this.login(token, newLogin),
           logout: (navigation) => this.logout(navigation),
-          refreshData: async () => await this.getLineupData(),
-          getGameData: async () => await this.getGameData(),
-          updatePlayerData: async (newUserObj) => await this.updatePlayerData(newUserObj),
-          addStrat: async (mapId) => await this.addStrat(mapId)
+          requester: async (action, param = {}) => await this.requester(action, param)
         }}
       >
         {this.props.children}
@@ -147,7 +166,7 @@ export function withGlobalContext(Component) {
     async _onRefresh() {
       await this.setState({ refreshing: true });
       try {
-        await GlobalContext._currentValue.getLineupData()
+        await GlobalContext._currentValue.requester(GET_LINEUP)
       } catch(err) {
 
       }

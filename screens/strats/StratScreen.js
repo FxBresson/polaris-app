@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import TabButton from '../../components/TabButton';
 import MapItem from '../../components/strats/MapItem';
+import { ADD_STRAT } from '../../helpers/queries'
 
 class StratScreen extends React.Component {
   static navigationOptions = {
@@ -31,7 +32,7 @@ class StratScreen extends React.Component {
     let strat = this.props.global.lineup.strats.find(strat => strat.map === mapId)
     if(!strat) {
       //Add Strat
-      await this.props.global.addStrat(mapId)
+      await this.props.global.requester(ADD_STRAT, {_id: mapId})
     }
     this.props.navigation.navigate('Map', {
       mapId: mapId,

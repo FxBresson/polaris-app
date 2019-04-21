@@ -21,8 +21,22 @@ const playerObj = `
   }
 `
 
+const matchObj = `
+      _id
+      date
+      type
+      result {
+        map
+        score
+        enemyScore
+      }
+      sr
+      teamSr
+`
+
+
 /* LINEUP */
-export const getLineup = `
+const GET_LINEUP = `
 query getLineUp($id: MongoID!) {
   lineupById(_id: $id) {
     _id
@@ -42,17 +56,17 @@ query getLineUp($id: MongoID!) {
 ${stratObj}
     }
     matchHistory {
-      date
+${matchObj}
     }
     matchSchedule {
-      date
+${matchObj}
     }
   }
 }
 `
 
 /* PLAYER */
-export const getPlayer = `
+const GET_PLAYER = `
 query getPlayer($player: FilterFindOnePlayerInput!) {
   playerOne(filter: $player) {
 ${playerObj}
@@ -60,7 +74,7 @@ ${playerObj}
 }
 `
 
-export const loginPlayer = `
+const LOGIN_PLAYER = `
 query {
   playerLogin {
     _id
@@ -86,7 +100,7 @@ query {
 }
 `
 
-export const updatePlayer = `
+const UPDATE_PLAYER = `
 mutation modifyPlayer($record: UpdateByIdPlayerInput!) {
   playerUpdateById(record: $record) {
     record {
@@ -97,7 +111,7 @@ ${playerObj}
 `
 
 /* DATA */
-export const getMaps = `
+const GET_MAPS = `
 query getMaps {
   mapsMany {
     _id
@@ -110,7 +124,7 @@ query getMaps {
 `
 
 /* STRAT */
-export const addStrat = `
+const ADD_STRAT = `
 mutation addStrat($record: CreateOneStratInput!) {
   stratCreateOne(record: $record) {
     record {
@@ -121,21 +135,20 @@ ${stratObj}
 `
 
 /* MATCH */ 
-export const createMatch = `
+const CREATE_MATCH = `
 mutation createMatch($record: CreateOneMatchInput!) {
   matchCreateOne(record: $record) {
-    record {
-      _id
-      date
-      type
-      result {
-        map
-        score
-        enemyScore
-      }
-      sr
-      teamSr
-    }
+    recordId
   }
 }
 `
+
+export { 
+  ADD_STRAT,
+  CREATE_MATCH,
+  GET_LINEUP,
+  GET_MAPS,
+  GET_PLAYER,
+  LOGIN_PLAYER,
+  UPDATE_PLAYER
+ }
