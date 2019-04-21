@@ -6,7 +6,9 @@ import {
   Text,
   View,
   FlatList,
-  Button
+  Button,
+  TextInput,
+  Picker
 } from 'react-native';
 import moment from 'moment'
 moment.locale('fr')
@@ -16,6 +18,10 @@ import { Overlay } from 'react-native-elements';
 import TabButton from '../../components/TabButton';
 import DoodleUser from '../../components/doodle/DoodleUser';
 import DoodleTeam from '../../components/doodle/DoodleTeam';
+import { Formik } from 'formik';
+import { UPDATE_PLAYER } from '../../helpers/queries'
+import DatePicker from 'react-native-datepicker'
+import { CREATE_MATCH } from '../../helpers/queries'
 
 
 class PlanningScreen extends React.Component {
@@ -45,7 +51,16 @@ class PlanningScreen extends React.Component {
       doodle: this.props.global.user.doodle
     }
     newUserObj.doodle[dayOfWeek] = newStatus
-    this.props.global.updatePlayerData(newUserObj)
+    this.props.global.requester(UPDATE_PLAYER, newUserObj)
+  }
+
+  createNewMatch(values) {
+    this.setState({ isOverlayVisible: false })
+    this.props.global.requester(CREATE_MATCH, {
+      type: values.type,
+      date: moment(values.date, "DD-MM-YYYY hh:mm")
+    })
+
   }
 
   render() {    
@@ -61,11 +76,8 @@ class PlanningScreen extends React.Component {
       doodle: player.doodle.slice(14, 21)
     }))
 
-    console.log(this.props.global.user.doodle)
-
     return (
       <View style={styles.container}>
-
         <Overlay
           isVisible={this.state.isOverlayVisible}
           windowBackgroundColor="rgba(255, 255, 255, .5)"
@@ -73,7 +85,51 @@ class PlanningScreen extends React.Component {
           height="auto"
           onBackdropPress={() => this.setState({ isOverlayVisible: false })}
         >
-          <Text>This is Overlay</Text>
+          <Formik
+            initialValues={{ date: moment().set({hour:21,minute:0,second:0,millisecond:0}), type: 'Scrim'}}
+            onSubmit={values => this.createNewMatch(values)}
+          >
+            {props => (
+              <View>
+                <DatePicker
+                  style={{width: 200}}
+                  date={props.values.date}
+                  mode="datetime"
+                  placeholder="Select date"
+                  format="DD-MM-YYYY hh:mm"
+                  is24Hour={true}
+                  minDate="03-02-2018"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      marginLeft: 36
+                    }
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={props.handleChange('date')}
+                />
+
+                <Picker
+                  selectedValue={props.values.type}
+                  style={{height: 50, width: 100}}
+                  onValueChange={props.handleChange('type')}
+                > 
+                  <Picker.Item label="Scrim" value="Scrim" />
+                  <Picker.Item label="Tournament" value="Tournament" />
+                  <Picker.Item label="Ranked" value="Ranked" />
+                </Picker>
+
+                <Button onPress={props.handleSubmit} title="Submit" />
+              </View>
+            )}
+          </Formik>
         </Overlay>
 
         <View>
