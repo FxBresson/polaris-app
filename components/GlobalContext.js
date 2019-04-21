@@ -174,13 +174,9 @@ export function withGlobalContext(Component) {
       }
     }
 
-    async _onRefresh() {
+    async _onRefresh(requester) {
       await this.setState({ refreshing: true });
-      try {
-        await GlobalContext._currentValue.requester(GET_LINEUP)
-      } catch(err) {
-
-      }
+      let refreshed = await requester(GET_LINEUP)
       this.setState({ refreshing: false })
     }
 
@@ -193,7 +189,7 @@ export function withGlobalContext(Component) {
                 refreshControl={
                   <RefreshControl
                     refreshing={this.state.refreshing}
-                    onRefresh={() => this._onRefresh()}
+                    onRefresh={() => this._onRefresh(value.requester)}
                   />
                 }
               >
