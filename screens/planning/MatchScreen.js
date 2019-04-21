@@ -4,8 +4,14 @@ import {
   View,
   ScrollView,
   StyleSheet,
+  Text,
+  Button,
+  TextInput,
+  Picker
 } from 'react-native';
-import { Overlay } from 'react-native-elements';
+import { Overlay, Tile } from 'react-native-elements';
+import { Formik } from 'formik';
+import { UDPDATE_MATCH } from '../../helpers/queries'
 
 class MatchScreen extends React.Component {
   static navigationOptions = {
@@ -15,20 +21,34 @@ class MatchScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOverlayVisible: true
+      isOverlayVisible: false
     }
   }
 
-  addMap() {
-    this.setState({ isOverlayVisible: true })
+  addMap(values) {
+    this.setState({ isOverlayVisible: false })
+    let match = this.props.navigation.getParam('match');
+    match.result.push({
+      map: values.map,
+      score: JSON.parse(values.score),
+      enemyScore: JSON.parse(values.enemyScore)
+    })
+    this.props.global.requester(UDPDATE_MATCH, { _id: match._id, result: match.result })
   }
 
 
   render() {
     const itemId = navigation.getParam('matchId');
     const score = this.state.result.reduce((total, map) => total + map.score)
-    const ennemyScore = this.state.result.reduce((total, map) => total + map.ennemyScore)
-
+    let score = 0;
+    let enemyScore = 0;
+    for (const map of match.result) {
+      if(map.score > map.enemyScore)
+        score++
+      if(map.score < map.enemyScore)
+        enemyScore++
+    }
+    
     return (
       <View style={styles.container}>
 
@@ -39,47 +59,85 @@ class MatchScreen extends React.Component {
           height="auto"
           onBackdropPress={() => this.setState({ isOverlayVisible: false })}
         >
-          <Text>This is Overlay</Text>
+          <Formik
+            initialValues={{ score: '0', enemyScore: '0', map: '' }}
+            onSubmit={values => this.addMap(values)}
+          >
+            {props => (
+              <View>
+                <Picker
+                  selectedValue={props.values.map}
+                  style={{height: 50, width: 200}}
+                  onValueChange={props.handleChange('map')}
+                > 
+                  <Picker.Item label={"Select Map"} value={''} />
+                  {this.props.global.maps.map((map, i) => {
+                    return (
+                      <Picker.Item key={map._id} label={map.name} value={map._id} />
+                    )
+                  })}
+                </Picker>
+                <TextInput
+                  onChangeText={props.handleChange('score')}
+                  onBlur={props.handleBlur('score')}
+                  value={props.values.score}
+                  maxLength={2}
+                  keyboardType={'numeric'}
+                />
+                <TextInput
+                  onChangeText={props.handleChange('enemyScore')}
+                  onBlur={props.handleBlur('enemyScore')}
+                  value={props.values.enemyScore}
+                  maxLength={2}
+                  keyboardType={'numeric'}
+                />
+                <Button onPress={props.handleSubmit} title="Submit" />
+              </View>
+            )}
+          </Formik>
         </Overlay>
 
         <View>
-          <Text>{this.state.date}</Text>
-          <Text>{this.state.type}</Text>
+          <Text>{match.date}</Text>
+          <Text>{match.type}</Text>
         </View>
 
         <View>
           <View>
-            <Text>{this.state.lineup}</Text>
-            <Text>{this.state.teamSr}</Text>
+            <Text>{match.teamSr}</Text>
           </View>
           <Text>VS</Text>
           <View>
-            <Text>{this.state.ennemies}</Text>
-            <Text>{this.state.sr}</Text>
+            <Text>{match.sr}</Text>
           </View>
         </View>
 
         <View>
           <Text>{score}</Text>
-          <Text>{ennemyScore}</Text>
+          <Text>{enemyScore}</Text>
         </View>
 
-        {this.state.result.map((result, i) => {
+        {match.result.map((result, i) => {
+          const map = this.props.global.maps.find((map) => map._id === result.map)
+
           return (
-            <View key={i}>
+            <View key={i} style={styles.mapScore}>
               <Text>{result.score}</Text>
               <Tile
-                imageSrc={{uri: result.map.image}}
-                title={result.map.name}
-              ></Tile>;
-              <Text>{result.ennemyScore}</Text>
+                imageSrc={{uri: map.thumbnail}}
+                title={map.name}
+                style={styles.mapImage}
+                width={200}
+                featured
+              ></Tile>
+              <Text>{result.enemyScore}</Text>
             </View>
           )
         })}
 
         <Button
             title="+"
-            onPress={this.addMap()}
+            onPress={() => this.setState({ isOverlayVisible: true })}
         />
       </View>
     );
@@ -93,6 +151,9 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       paddingTop: 80,
+    },
+    mapScore: {
+      flexDirection: "row"
     },
   });
   

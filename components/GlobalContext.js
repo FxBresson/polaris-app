@@ -11,7 +11,8 @@ import {
   GET_MAPS,
   GET_PLAYER,
   LOGIN_PLAYER,
-  UPDATE_PLAYER
+  UPDATE_PLAYER,
+  UDPDATE_MATCH
 } from '../helpers/queries';
 
 export const GlobalContext = React.createContext();
@@ -73,40 +74,39 @@ export class GlobalContextProvider extends React.Component {
   }
 
   async getNewState(action, param = {}) {
-    let variables = {}
     let lineup = this.state.lineup
     try {
       switch (action) {
-        case GET_MAPS:
+        case GET_MAPS: {
           
           let maps = await this.client.request(GET_MAPS)
           return { maps: maps.mapsMany}
-        
-        case GET_LINEUP:
-          variables = {
+        }
+        case GET_LINEUP: {
+          let variables = {
             id: this.state.lineupId
           }
           let lineupData = await this.client.request(GET_LINEUP, variables)
           return { lineup: lineupData.lineupById };
-        
-        case 'UPDATE_LINEUP':
+        }
+        case 'UPDATE_LINEUP': {
           return null
           break;
-        
-        case 'GET_PLAYER':
+        }
+        case 'GET_PLAYER': {
           return null
-        
-        case UPDATE_PLAYER:
-          variables = {
+        }
+        case UPDATE_PLAYER: {
+          let variables = {
             record: {
               ...param
             }
           }
           let userObj = await this.client.request(UPDATE_PLAYER, variables)
           return { user: userObj.playerUpdateById.record };
-        
-        case ADD_STRAT:
-          variables = {
+        }
+        case ADD_STRAT: {
+          let variables = {
             record: {
               lineup: this.state.lineupId,
               ...param
@@ -115,9 +115,9 @@ export class GlobalContextProvider extends React.Component {
           let strat = await this.client.request(ADD_STRAT, variables)
           lineup.strats.push(strat.stratCreateOne.record)
           return { lineup: lineup };
-                
-        case CREATE_MATCH: 
-          variables = {
+        }
+        case CREATE_MATCH: {
+          let variables = {
             record: {
               lineup: this.state.lineupId,
               ...param
@@ -126,6 +126,17 @@ export class GlobalContextProvider extends React.Component {
           let match = await this.client.request(CREATE_MATCH, variables)
           let lineup = await this.getNewState(GET_LINEUP)
           return lineup
+        }
+        case UDPDATE_MATCH: {
+          let variables = {
+            record: {
+              ...param
+            }
+          }
+          let match = await this.client.request(UDPDATE_MATCH, variables)
+          let lineup = await this.getNewState(GET_LINEUP)
+          return lineup
+        }
         default:
           break;
       }

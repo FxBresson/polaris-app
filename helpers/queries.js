@@ -143,6 +143,14 @@ mutation createMatch($record: CreateOneMatchInput!) {
 }
 `
 
+const UDPDATE_MATCH = `
+mutation matchUpdate($record: UpdateByIdMatchInput!) {
+  matchUpdateById(record: $record) {
+    recordId
+  }
+}
+`
+
 export { 
   ADD_STRAT,
   CREATE_MATCH,
@@ -150,5 +158,6 @@ export {
   GET_MAPS,
   GET_PLAYER,
   LOGIN_PLAYER,
-  UPDATE_PLAYER
+  UPDATE_PLAYER,
+  UDPDATE_MATCH
  }
