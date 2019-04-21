@@ -10,11 +10,7 @@ export default class MatchItem extends Component {
   render() {
     return (
       <TouchableOpacity
-        onPress={() => {
-          this.props.navigation.navigate('Match', {
-            matchId: this.props._id,
-          });
-        }}
+        onPress={this.props.goToMatch}
       >
         <View>
           <View>

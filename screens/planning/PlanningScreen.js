@@ -41,10 +41,6 @@ class PlanningScreen extends React.Component {
     this.setState({ isMatchListHistory: isHistory });
   }
 
-  addMatch() {
-    this.setState({ isOverlayVisible: true })
-  }
-
   updateDoodle(newStatus, dayOfWeek) {
     let newUserObj = {
       _id: this.props.global.user._id,
@@ -61,6 +57,12 @@ class PlanningScreen extends React.Component {
       date: moment(values.date, "DD-MM-YYYY hh:mm")
     })
 
+  }
+
+  goToMatch(item) {
+      this.props.navigation.navigate('Match', {
+        match_id: item
+      });
   }
 
   render() {    
@@ -177,14 +179,14 @@ class PlanningScreen extends React.Component {
 
         <FlatList
           data={matchsData}
-          renderItem={({item}) => <MatchItem {...item} navigation={this.props.navigation} />}
+          renderItem={({item}) => <MatchItem {...item} goToMatch={() => this.goToMatch(item._id)} />}
           keyExtractor={(item, index) => item._id}
         />
 
         {!this.state.isMatchListHistory &&
           <Button
             title="+"
-            onPress={() => this.addMatch()}
+            onPress={() => this.setState({ isOverlayVisible: true })}
           />
         }
 

@@ -38,8 +38,8 @@ class MatchScreen extends React.Component {
 
 
   render() {
-    const itemId = navigation.getParam('matchId');
-    const score = this.state.result.reduce((total, map) => total + map.score)
+    const match_id = this.props.navigation.getParam('match_id');
+    const match = [...this.props.global.lineup.matchHistory, ...this.props.global.lineup.matchSchedule].find(match => match._id === match_id)
     let score = 0;
     let enemyScore = 0;
     for (const map of match.result) {
