@@ -70,11 +70,11 @@ class PlanningScreen extends React.Component {
     const date = moment()
 
     let thisWeekTeamValue = this.props.global.lineup.players.map(player => ({
-      mainBtag: player.mainBtag,
+      name: player.name,
       doodle: player.doodle.slice(7, 14)
     }))
     let nextWeekTeamValue = this.props.global.lineup.players.map(player => ({
-      mainBtag: player.mainBtag,
+      name: player.name,
       doodle: player.doodle.slice(14, 21)
     }))
 

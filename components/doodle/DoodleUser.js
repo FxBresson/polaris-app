@@ -16,7 +16,7 @@ export default class DoodleUser extends Component {
   render() {
     return (
       <View>
-        <View>
+        <View style={styles.line}>
           <Text>S{this.props.weekNumber}</Text>
           {moment.weekdaysMin().map((dayName, i) => {
             return (
@@ -37,5 +37,7 @@ export default class DoodleUser extends Component {
 }
 
 const styles = StyleSheet.create({
-
+  line: {
+    flexDirection: 'row'
+  }
 })

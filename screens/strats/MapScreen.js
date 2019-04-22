@@ -45,11 +45,12 @@ class MapScreen extends React.Component {
           comps={strat.comps.filter(comp => !comp.isDefense)}
         />
 
-        {map.mapTypes.includes('escort')}
-        <StratPhase
-          phaseName="Defense"
-          comps={strat.comps.filter(comp => comp.isDefense)}
-        />
+        {!map.mapTypes.includes('control') &&
+          <StratPhase
+            phaseName="Defense"
+            comps={strat.comps.filter(comp => comp.isDefense)}
+          />
+        }
       </View>
     );
   }

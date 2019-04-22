@@ -45,9 +45,9 @@ query getLineUp($id: MongoID!) {
     objectives
     players {
       mainBtag
-      name,
-      status,
-      doodle,
+      name
+      status
+      doodle
       role {
         name
       }

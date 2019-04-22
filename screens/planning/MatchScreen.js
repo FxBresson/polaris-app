@@ -27,7 +27,7 @@ class MatchScreen extends React.Component {
 
   addMap(values) {
     this.setState({ isOverlayVisible: false })
-    let match = this.props.navigation.getParam('match');
+    let match = [...this.props.global.lineup.matchHistory, ...this.props.global.lineup.matchSchedule].find(match => match._id === match_id)
     match.result.push({
       map: values.map,
       score: JSON.parse(values.score),

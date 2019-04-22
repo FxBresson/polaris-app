@@ -32,7 +32,7 @@ class StratScreen extends React.Component {
     let strat = this.props.global.lineup.strats.find(strat => strat.map === mapId)
     if(!strat) {
       //Add Strat
-      await this.props.global.requester(ADD_STRAT, {_id: mapId})
+      await this.props.global.requester(ADD_STRAT, {map: mapId})
     }
     this.props.navigation.navigate('Map', {
       mapId: mapId,
@@ -48,22 +48,22 @@ class StratScreen extends React.Component {
         <View>
           <TabButton
             title="Assault"
-            selected={this.mapType === 'assault'}
+            selected={this.state.mapType === 'assault'}
             onPress={() => this.selectMapType('assault')}
           />
           <TabButton
             title="Escort"
-            selected={this.mapType === 'escort'}
+            selected={this.state.mapType === 'escort'}
             onPress={() => this.selectMapType('escort')}
           />
           <TabButton
             title="Hybrid"
-            selected={this.mapType === 'assaultEscort'}
+            selected={this.state.mapType === 'assaultEscort'}
             onPress={() => this.selectMapType('assaultEscort')}
           />
           <TabButton
             title="Control"
-            selected={this.mapType === 'control'}
+            selected={this.state.mapType === 'control'}
             onPress={() => this.selectMapType('control')}
           />
         </View>

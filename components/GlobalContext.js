@@ -55,9 +55,8 @@ export class GlobalContextProvider extends React.Component {
 
   async logout(navigation) {
     AsyncStorage.removeItem('userToken')
-    AsyncStorage.removeItem('mainBtag')
+    navigation.navigate('AuthLoading');
     await this.setState({ userToken: null, user: null, lineupId: null });
-    navigation.navigate('Auth');
   }
 
   async changeLineup(lineupId) {
