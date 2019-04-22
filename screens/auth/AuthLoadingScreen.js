@@ -25,7 +25,8 @@ class AuthLoadingScreen extends React.Component {
     super(props);
 
     this.state = {
-      resourcesLoaded: false,
+      isLoadingResources: true,
+      isLoadingData: false,
       error: false,
       needLogin: false,
       isNewLogin: false 
@@ -33,57 +34,40 @@ class AuthLoadingScreen extends React.Component {
   }
 
 
-  componentDidMount() {
-    this._loadResourcesAsync()
-      .then(() => {
-        this.setState({ resourcesLoaded: true })
-        this._loadToken()
-      })
-      .catch((err) => {
-        console.warn(err);
-        this.setState({ error: true })
-      })
-        
-  }
+  async componentDidMount() {
+    // LOAD ASSETS
+    await Asset.loadAsync([
+      // require('../assets/images/robot-prod.png'),
+    ]),
+    await Font.loadAsync({
+      ...Icon.Ionicons.font,
+      'space-mono': require('../../assets/fonts/SpaceMono-Regular.ttf'),
+    })
+    this.setState({ isLoadingResources: false })
 
-  async _loadResourcesAsync() {
-    return Promise.all([
-      Asset.loadAsync([
-        // require('../assets/images/robot-prod.png'),
-      ]),
-      Font.loadAsync({
-        ...Icon.Ionicons.font,
-        'space-mono': require('../../assets/fonts/SpaceMono-Regular.ttf'),
-      })
-    ]);
-  };
-
-  async _loadToken() {
+    //LOAD TOKEN
+    // await AsyncStorage.setItem('userToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN0YXR1cyI6WyJQbGF5ZXIiLCJGb3VuZGVyIiwiQ2FwdGFpbiJdLCJfaWQiOiI1Y2FmNDFlNDI3ODg1MGFlNzZhNjFkNjEiLCJtYWluQnRhZyI6IlRvb3RobGVzcyMyMjM2IiwibGluZXVwIjoiNWNhZjQxNDA3NTllNzdkY2RmNDc0YmMxIiwiX192IjowLCJibmV0UHJvZmlsZUlkIjoiMTM4NDAzMTc3In0sImlhdCI6MTU1NTE2MDYwNX0.InnlY95Pkq7A_gqCLUnuloXoxYhtV0cbloT4t2wwP70')
     const userToken = await AsyncStorage.getItem('userToken');
-
     if (userToken) {
       this._loadDataAsync(userToken, false)
     } else {
       this.setState({ needLogin: true })
-      Linking.addEventListener('url', this.handleRedirect);
+      
+      Linking.addEventListener('url', this.handleRedirect.bind(this));
     }
-  };
+  }
 
   async handleOAuthLogin() {
     // gets the app's deep link
     let redirectUrl = await Linking.getInitialURL()
-
     let authUrl = `https://polarisapi.serveo.net/auth/bnet?url=${encodeURIComponent(redirectUrl)}`
-    
     try {
       await WebBrowser.openAuthSessionAsync(authUrl)
     } catch (err) {
       console.error(err)
     }
   }
-
-
-  async handleRedirect(event) {
+  handleRedirect(event) {
     Linking.removeEventListener('url', this.handleRedirect)
     // WebBrowser.dismissBrowser()
 
@@ -94,33 +78,36 @@ class AuthLoadingScreen extends React.Component {
       params[d(pair[0])] = d(pair[1] || '');
     }
 
+    console.log(params.token)
+
+    console.log(this)
+    this.loadDataAsync(params.token, true)
+  }
+
+  async loadDataAsync(token, newLogin) {
     try {
-      this._loadDataAsync(params.token, true)
+      await this.setState({ needLogin: false, isNewLogin: newLogin, isLoadingData: true })
+      await this.props.global.login(token, newLogin)
+      await this.props.global.requester(GET_LINEUP)
+      await this.props.global.requester(GET_MAPS)
+      this.props.navigation.navigate('Main')
     } catch(err) {
       console.error(err)
       this.setState({ error: true })
     }
   }
 
-  async _loadDataAsync(token, newLogin) {
-    await this.setState({ needLogin: false, isNewLogin: newLogin })
-    await this.props.global.login(token, newLogin)
-    await this.props.global.requester(GET_LINEUP)
-    await this.props.global.requester(GET_MAPS)
-    this.props.navigation.navigate('Main')
-  }
-
   render() {
     return (
       <View>
-        {!this.state.resourcesLoaded &&
+        {this.state.isLoadingResources &&
           <View>
             <ActivityIndicator/>
             <Text>Loading Assets</Text>
           </View>
         }
 
-        {!this.props.global.lineup &&
+        {this.state.isLoadingData &&
           <View>
             <ActivityIndicator/>
             <Text>Loading Data</Text>
@@ -128,7 +115,7 @@ class AuthLoadingScreen extends React.Component {
         }
         
         {this.state.needLogin &&
-          <Button onPress={this.handleOAuthLogin} title="LOGIN"></Button>
+          <Button onPress={() => this.handleOAuthLogin()} title="LOGIN"></Button>
         }
 
         {this.props.global.user &&
