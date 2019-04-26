@@ -59,9 +59,10 @@ class PlanningScreen extends React.Component {
 
   }
 
-  goToMatch(item) {
+  goToMatch(match) {
       this.props.navigation.navigate('Match', {
-        match_id: item
+        match_id: match._id,
+        match_name: moment(match.date).format(`[${match.type}] lll`)
       });
   }
 
@@ -179,7 +180,7 @@ class PlanningScreen extends React.Component {
 
         <FlatList
           data={matchsData}
-          renderItem={({item}) => <MatchItem {...item} goToMatch={() => this.goToMatch(item._id)} />}
+          renderItem={({item}) => <MatchItem {...item} goToMatch={() => this.goToMatch(item)} />}
           keyExtractor={(item, index) => item._id}
         />
 

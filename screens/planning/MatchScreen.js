@@ -14,8 +14,10 @@ import { Formik } from 'formik';
 import { UDPDATE_MATCH } from '../../helpers/queries'
 
 class MatchScreen extends React.Component {
-  static navigationOptions = {
-    title: '',
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam('match_name'),
+    }
   };
 
   constructor(props) {
@@ -27,6 +29,7 @@ class MatchScreen extends React.Component {
 
   addMap(values) {
     this.setState({ isOverlayVisible: false })
+    const match_id = this.props.navigation.getParam('match_id');
     let match = [...this.props.global.lineup.matchHistory, ...this.props.global.lineup.matchSchedule].find(match => match._id === match_id)
     match.result.push({
       map: values.map,
