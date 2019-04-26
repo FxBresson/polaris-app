@@ -6,7 +6,7 @@ import {
   StyleSheet,
   FlatList
 } from 'react-native';
-import TabButton from '../../components/TabButton';
+import Tabs from '../../components/Tabs';
 import MapItem from '../../components/strats/MapItem';
 import { ADD_STRAT } from '../../helpers/queries'
 
@@ -46,28 +46,28 @@ class StratScreen extends React.Component {
     return (
       <View style={styles.container}>
 
-        <View>
-          <TabButton
+        <Tabs>
+          <Tabs.Button
             title="Assault"
             selected={this.state.mapType === 'assault'}
             onPress={() => this.selectMapType('assault')}
           />
-          <TabButton
+          <Tabs.Button
             title="Escort"
             selected={this.state.mapType === 'escort'}
             onPress={() => this.selectMapType('escort')}
           />
-          <TabButton
+          <Tabs.Button
             title="Hybrid"
             selected={this.state.mapType === 'assaultEscort'}
             onPress={() => this.selectMapType('assaultEscort')}
           />
-          <TabButton
+          <Tabs.Button
             title="Control"
             selected={this.state.mapType === 'control'}
             onPress={() => this.selectMapType('control')}
           />
-        </View>
+        </Tabs>
 
         <FlatList
           data={mapsData}

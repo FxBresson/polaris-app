@@ -15,7 +15,7 @@ moment.locale('fr')
 import { withGlobalContext } from '../../components/GlobalContext'
 import MatchItem from '../../components/matchs/MatchItem';
 import { Overlay } from 'react-native-elements';
-import TabButton from '../../components/TabButton';
+import Tabs from '../../components/Tabs';
 import DoodleUser from '../../components/doodle/DoodleUser';
 import DoodleTeam from '../../components/doodle/DoodleTeam';
 import { Formik } from 'formik';
@@ -165,18 +165,18 @@ class PlanningScreen extends React.Component {
           
         </View>
 
-        <View>
-          <TabButton
+        <Tabs>
+          <Tabs.Button
             title="Prochains Matchs"
             selected={!this.state.isMatchListHistory}
             onPress={() => this.matchDataHistory(false)}
           />
-          <TabButton
+          <Tabs.Button
             title="Matchs passés"
             selected={this.state.isMatchListHistory}
             onPress={() => this.matchDataHistory(true)}
           />
-        </View>
+        </Tabs>
 
         <FlatList
           data={matchsData}
