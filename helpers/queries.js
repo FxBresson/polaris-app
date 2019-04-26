@@ -123,6 +123,20 @@ query getMaps {
 }
 `
 
+const GET_CHARACTERS = `
+query getCharacters {
+  characterMany {
+    _id
+    name
+    role {
+      name
+    }
+    img
+  }
+}
+`
+
+
 /* STRAT */
 const ADD_STRAT = `
 mutation addStrat($record: CreateOneStratInput!) {
@@ -160,4 +174,5 @@ export {
   LOGIN_PLAYER,
   UPDATE_PLAYER,
   UDPDATE_MATCH
+  GET_CHARACTERS
  }

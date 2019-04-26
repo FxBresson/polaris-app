@@ -13,6 +13,7 @@ import {
   LOGIN_PLAYER,
   UPDATE_PLAYER,
   UDPDATE_MATCH
+  GET_CHARACTERS
 } from '../helpers/queries';
 
 export const GlobalContext = React.createContext();
@@ -28,7 +29,8 @@ export class GlobalContextProvider extends React.Component {
       user: null,
       lineupId: null,
       lineup: null,
-      maps: null
+      maps: null,
+      characters: null
     }
 
   }
@@ -80,6 +82,10 @@ export class GlobalContextProvider extends React.Component {
           
           let maps = await this.client.request(GET_MAPS)
           return { maps: maps.mapsMany}
+        }
+        case GET_CHARACTERS: {
+          let characters = await this.client.request(GET_CHARACTERS)
+          return { characters: characters.characterMany }
         }
         case GET_LINEUP: {
           let variables = {
