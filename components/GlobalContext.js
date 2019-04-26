@@ -49,7 +49,7 @@ export class GlobalContextProvider extends React.Component {
 
     try {
       const user = await this.client.request(LOGIN_PLAYER)
-      return await this.setState({ userToken: token, user: user.playerLogin, lineupId: user.playerLogin.lineup})
+      return await this.setState({ userToken: token, user: user.playerLogin, lineupId: user.playerLogin.lineup._id})
     } catch (err) {
       console.error(err)
       return false

@@ -3,6 +3,7 @@ const stratObj = `
   map
   comments
   comps {
+    _id
     name
     isDefense
     characters
@@ -10,15 +11,28 @@ const stratObj = `
 `
 
 const playerObj = `
-  _id
-  mainBtag
-  name
-  lineup
-  status
-  doodle
-  role {
+    _id
+    mainBtag
     name
-  }
+    lineup {
+      _id
+      name
+    }
+    status
+    doodle
+    role {
+      name
+    }
+    profile {
+      level
+      portrait
+      endorsement
+      rank
+      rank_img
+      levelFrame
+      levelStars
+    }
+    lastStats
 `
 
 const matchObj = `
@@ -77,25 +91,7 @@ ${playerObj}
 const LOGIN_PLAYER = `
 query {
   playerLogin {
-    _id
-    mainBtag
-    name
-    lineup
-    status
-    doodle
-    role {
-      name
-    }
-    profile {
-      level
-      portrait
-      endorsement
-      rank
-      rank_img
-      levelFrame
-      levelStars
-    }
-    lastStats
+${playerObj}
   }
 }
 `
