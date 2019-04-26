@@ -41,7 +41,8 @@ class StratScreen extends React.Component {
   }
 
   render() {
-    const mapsData = this.props.global.maps.filter(map => map.mapTypes.includes(this.state.mapType))
+    let mapsData = this.props.global.maps.filter(map => map.mapTypes.includes(this.state.mapType))
+    
 
     return (
       <View style={styles.container}>
@@ -72,12 +73,22 @@ class StratScreen extends React.Component {
         <FlatList
           data={mapsData}
           keyExtractor={this._keyExtractor}
-          renderItem={({item}) => (
-            <MapItem 
-              {...item} 
-              onPress={() => this.goToMapStrat(item)} 
-            />
-          )}
+          renderItem={({item}) => {
+            let strat = this.props.global.lineup.strats.find(strat => strat.map === item._id)
+            let comps = {
+              attackCompsNb: strat && strat.comps.length ? strat.comps.filter(comp => !comp.isDefense).length : 0
+            }
+            if (this.state.mapType != 'control') {
+              comps.defenseCompsNb = strat && strat.comps.length ? strat.comps.filter(comp => comp.isDefense).length : 0
+            }
+            return (
+              <MapItem 
+                {...item} 
+                {...comps}
+                onPress={() => this.goToMapStrat(item)} 
+              />
+            )
+          }}
         />
 
       </View>

@@ -9,16 +9,23 @@ export default class MapItem extends Component {
   }
 
   render() {
+
+    console.log(this.props.comps)
+
+   
     return (
       <TouchableOpacity
         onPress={this.props.onPress}
+        style={styles.mapItem}
       >
         <Avatar
+          styles={styles.image}
+          size={60}
           rounded
           source={{uri: this.props.thumbnail}}
         />
-        <View>
-          <View>
+        <View style={styles.stratInfos}>
+          <View style={styles.mapInfos}>
             <Image 
               source={{uri: this.props.flagUrl}}
               style={styles.flag}
@@ -26,13 +33,13 @@ export default class MapItem extends Component {
             />
             <Text>{this.props.name}</Text>
           </View>
-          {/* <View>
-            {this.props.defense ? 
-              <Text>{this.props.attack} Attack Comps - {this.props.defense} Defense Comps</Text>
+          <View>
+            {this.props.defenseCompsNb ? 
+              <Text>{this.props.attackCompsNb} Attack Comps - {this.props.defenseCompsNb} Defense Comps</Text>
             :
-              <Text>{this.props.attack} Comps</Text>
+              <Text>{this.props.attackCompsNb} Comps</Text>
             }
-          </View> */}
+          </View>
         </View>
       </TouchableOpacity>
     )
@@ -41,7 +48,23 @@ export default class MapItem extends Component {
 
 const styles = StyleSheet.create({
   flag: {
-    width: undefined,
-    height: 25
+    width: 20,
+    height: undefined,
+    marginRight: 10
+  },
+  mapItem: {
+    flexDirection: 'row',
+    padding: 10,
+  },
+  image: {
+  },
+  mapInfos: {
+    flexDirection:'row',
+  },
+  stratInfos: {
+    marginLeft: 10,
+    justifyContent: 'space-evenly',
   }
+
+
 })
