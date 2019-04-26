@@ -12,7 +12,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { WebBrowser, Linking, AuthSession, Asset, Font, Icon } from 'expo';
-import { GET_MAPS, GET_LINEUP } from '../../helpers/queries'
+import { GET_MAPS, GET_LINEUP, GET_CHARACTERS } from '../../helpers/queries'
 
 import { withGlobalContext } from '../../components/GlobalContext';
 
@@ -90,6 +90,7 @@ class AuthLoadingScreen extends React.Component {
       await this.props.global.login(token, newLogin)
       await this.props.global.requester(GET_LINEUP)
       await this.props.global.requester(GET_MAPS)
+      await this.props.global.requester(GET_CHARACTERS)
       this.props.navigation.navigate('Main')
     } catch(err) {
       console.error(err)
