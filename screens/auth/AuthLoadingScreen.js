@@ -98,7 +98,7 @@ class AuthLoadingScreen extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         {this.state.isLoadingResources &&
           <View>
             <ActivityIndicator/>
@@ -135,6 +135,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 80,
+    paddingTop: Platform.OS === 'ios' ? 20 : 0
   },
 });
