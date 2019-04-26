@@ -31,6 +31,8 @@ class AuthLoadingScreen extends React.Component {
       needLogin: false,
       isNewLogin: false 
     }
+
+    this.handleRedirect = this.handleRedirect.bind(this)
   }
 
 
@@ -49,11 +51,11 @@ class AuthLoadingScreen extends React.Component {
     // await AsyncStorage.setItem('userToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN0YXR1cyI6WyJQbGF5ZXIiLCJGb3VuZGVyIiwiQ2FwdGFpbiJdLCJfaWQiOiI1Y2FmNDFlNDI3ODg1MGFlNzZhNjFkNjEiLCJtYWluQnRhZyI6IlRvb3RobGVzcyMyMjM2IiwibGluZXVwIjoiNWNhZjQxNDA3NTllNzdkY2RmNDc0YmMxIiwiX192IjowLCJibmV0UHJvZmlsZUlkIjoiMTM4NDAzMTc3In0sImlhdCI6MTU1NTE2MDYwNX0.InnlY95Pkq7A_gqCLUnuloXoxYhtV0cbloT4t2wwP70')
     const userToken = await AsyncStorage.getItem('userToken');
     if (userToken) {
-      this._loadDataAsync(userToken, false)
+      this.loadDataAsync(userToken, false)
     } else {
       this.setState({ needLogin: true })
       
-      Linking.addEventListener('url', this.handleRedirect.bind(this));
+      Linking.addEventListener('url', this.handleRedirect);
     }
   }
 
@@ -77,10 +79,6 @@ class AuthLoadingScreen extends React.Component {
       pair = pair.split('=')
       params[d(pair[0])] = d(pair[1] || '');
     }
-
-    console.log(params.token)
-
-    console.log(this)
     this.loadDataAsync(params.token, true)
   }
 
