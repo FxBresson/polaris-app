@@ -148,6 +148,14 @@ ${stratObj}
 }
 `
 
+const UPDATE_STRAT = `
+mutation stratUpdate($record: UpdateByIdStratInput!) {
+  stratUpdateById(record: $record) {
+    recordId
+  }
+}
+`
+
 /* MATCH */ 
 const CREATE_MATCH = `
 mutation createMatch($record: CreateOneMatchInput!) {
@@ -173,6 +181,7 @@ export {
   GET_PLAYER,
   LOGIN_PLAYER,
   UPDATE_PLAYER,
-  UDPDATE_MATCH
+  UDPDATE_MATCH,
+  UPDATE_STRAT,
   GET_CHARACTERS
  }

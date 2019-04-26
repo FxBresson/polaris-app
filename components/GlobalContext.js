@@ -12,7 +12,8 @@ import {
   GET_PLAYER,
   LOGIN_PLAYER,
   UPDATE_PLAYER,
-  UDPDATE_MATCH
+  UDPDATE_MATCH,
+  UPDATE_STRAT,
   GET_CHARACTERS
 } from '../helpers/queries';
 
@@ -120,6 +121,15 @@ export class GlobalContextProvider extends React.Component {
           let strat = await this.client.request(ADD_STRAT, variables)
           lineup.strats.push(strat.stratCreateOne.record)
           return { lineup: lineup };
+        }
+        case UPDATE_STRAT: {
+          let variables = {
+            record: {
+              ...param
+            }
+          }
+          let strat = await this.client.request(UPDATE_STRAT, variables)
+          return {}
         }
         case CREATE_MATCH: {
           let variables = {
