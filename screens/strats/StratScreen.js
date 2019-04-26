@@ -28,14 +28,15 @@ class StratScreen extends React.Component {
     this.setState({mapType: mapType})
   }
 
-  async goToMapStrat(mapId) {
-    let strat = this.props.global.lineup.strats.find(strat => strat.map === mapId)
+  async goToMapStrat(map) {
+    let strat = this.props.global.lineup.strats.find(strat => strat.map === map._id)
     if(!strat) {
       //Add Strat
       await this.props.global.requester(ADD_STRAT, {map: mapId})
     }
     this.props.navigation.navigate('Map', {
-      mapId: mapId,
+      mapId: map._id,
+      mapName: map.name
     });
   }
 
@@ -74,7 +75,7 @@ class StratScreen extends React.Component {
           renderItem={({item}) => (
             <MapItem 
               {...item} 
-              onPress={() => this.goToMapStrat(item._id)} 
+              onPress={() => this.goToMapStrat(item)} 
             />
           )}
         />
