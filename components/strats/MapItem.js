@@ -9,9 +9,6 @@ export default class MapItem extends Component {
   }
 
   render() {
-
-    console.log(this.props.comps)
-
    
     return (
       <TouchableOpacity

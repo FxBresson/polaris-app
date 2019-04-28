@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { Overlay, Tile } from 'react-native-elements';
 import { Formik } from 'formik';
-import { UDPDATE_MATCH } from '../../helpers/queries'
+import { UDPDATE_MATCH } from '../../helpers/queries';
 
 class MatchScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -151,9 +151,6 @@ export default withGlobalContext(MatchScreen)
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      paddingTop: 80,
     },
     mapScore: {
       flexDirection: "row"
