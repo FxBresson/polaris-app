@@ -11,7 +11,7 @@ import {
   Picker
 } from 'react-native';
 import moment from 'moment'
-moment.locale('fr')
+import 'moment/locale/fr';
 import { withGlobalContext } from '../../components/GlobalContext'
 import MatchItem from '../../components/matchs/MatchItem';
 import { Overlay } from 'react-native-elements';

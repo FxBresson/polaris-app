@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
-import moment from 'moment'
+import Text from '../Text';
+import moment from 'moment';
+import 'moment/locale/fr';
 import DoodleLine from './DoodleLine';
-moment.locale('fr')
+import Colors from '../../constants/Colors';
 
 
 

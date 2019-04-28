@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
-
+import moment from 'moment';
+import 'moment/locale/fr'
 export default class MatchItem extends Component {
 
   constructor(props) {
