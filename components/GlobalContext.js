@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, RefreshControl, AsyncStorage} from 'react-native';
+import { ScrollView, RefreshControl, AsyncStorage, ImageBackground} from 'react-native';
 
 import { API_URL } from '../config';
 import { GraphQLClient } from 'graphql-request';
@@ -16,6 +16,9 @@ import {
   UPDATE_STRAT,
   GET_CHARACTERS
 } from '../helpers/queries';
+import Colors from '../constants/Colors';
+import { LinearGradient,  } from 'expo';
+
 
 export const GlobalContext = React.createContext();
 
@@ -200,16 +203,27 @@ export function withGlobalContext(Component) {
         <GlobalContext.Consumer>
           {(value) => {
             return (
-              <ScrollView
-                refreshControl={
-                  <RefreshControl
-                    refreshing={this.state.refreshing}
-                    onRefresh={() => this._onRefresh(value.requester)}
-                  />
-                }
+              <ImageBackground
+                source={require('../assets/images/background.jpg')}
+                // style={{position:'absolute', top:0, bottom: 0, left: 0, right: 0}}
+                style={{flex: 1, resizeMode: 'cover'}}
               >
-                <Component {...this.props} global={value} />
-              </ScrollView>
+                <LinearGradient 
+                  colors={[Colors.blueGradient.from, Colors.blueGradient.to]}
+                  style={{position:'absolute', top:0, bottom: 0, left: 0, right: 0}}
+                >
+                  <ScrollView
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={this.state.refreshing}
+                        onRefresh={() => this._onRefresh(value.requester)}
+                      />
+                    }
+                  >
+                    <Component {...this.props} global={value} />
+                  </ScrollView>
+                </LinearGradient>
+              </ImageBackground>
             )
           }}
         </GlobalContext.Consumer>

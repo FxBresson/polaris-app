@@ -22,6 +22,22 @@ import {
   ProfileScreen
 } from '../screens/profile';
 
+import Colors from '../constants/Colors';
+
+
+
+const headerStyle = {
+  defaultNavigationOptions: {
+    headerStyle: {
+      backgroundColor: Colors.navyBlue,
+    },
+    headerTintColor: Colors.textColor,
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }
+}
+
 /*
   HOME
 */
@@ -29,6 +45,7 @@ const HomeStack = createStackNavigator({
   Home: HomeScreen,
 }, {
   initialRouteName: 'Home',
+  ...headerStyle
 })
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home'
@@ -40,6 +57,7 @@ HomeStack.navigationOptions = {
 const LineupStack = createStackNavigator({
   Lineup: LineupScreen,
 }, {
+  ...headerStyle
 });
 LineupStack.navigationOptions = {
   tabBarLabel: 'Lineup',
@@ -53,6 +71,7 @@ const PlanningStack = createStackNavigator({
   Match: MatchScreen
 }, {
   initialRouteName: 'Planning',
+  ...headerStyle
 });
 PlanningStack.navigationOptions = {
   tabBarLabel: 'Planning',
@@ -66,6 +85,7 @@ const StratStack = createStackNavigator({
   Map: MapScreen
 }, {
   initialRouteName: 'Strat',
+  ...headerStyle
 });
 StratStack.navigationOptions = {
   tabBarLabel: 'Strats',
@@ -77,6 +97,7 @@ StratStack.navigationOptions = {
 const ProfileStack = createStackNavigator({
   Profile: ProfileScreen,
 }, {
+  ...headerStyle
 });
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
@@ -100,4 +121,10 @@ export default createBottomTabNavigator({
   PlanningStack,
   StratStack,
   ProfileStack
+}, {
+  tabBarOptions: {
+    style: {
+      backgroundColor: Colors.navyBlue,
+    },
+  }
 });

@@ -39,6 +39,7 @@ class AuthLoadingScreen extends React.Component {
   async componentDidMount() {
     // LOAD ASSETS
     await Asset.loadAsync([
+      require('../../assets/images/background.jpg')
       // require('../assets/images/robot-prod.png'),
     ]),
     await Font.loadAsync({
