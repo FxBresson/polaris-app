@@ -14,7 +14,8 @@ import {
   UPDATE_PLAYER,
   UDPDATE_MATCH,
   UPDATE_STRAT,
-  GET_CHARACTERS
+  GET_CHARACTERS,
+  GET_ROLES,
 } from '../helpers/queries';
 import Colors from '../constants/Colors';
 import { LinearGradient,  } from 'expo';
@@ -90,6 +91,10 @@ export class GlobalContextProvider extends React.Component {
         case GET_CHARACTERS: {
           let characters = await this.client.request(GET_CHARACTERS)
           return { characters: characters.characterMany }
+        }
+        case GET_ROLES: {
+          let roles = await this.client.request(GET_ROLES);
+          return { roles: roles.rolesMany }
         }
         case GET_LINEUP: {
           let variables = {

@@ -132,6 +132,14 @@ query getCharacters {
 }
 `
 
+const GET_ROLES = `
+query getRoles {
+  rolesMany {
+    _id
+    name
+  }
+}
+`
 
 /* STRAT */
 const ADD_STRAT = `
@@ -179,5 +187,6 @@ export {
   UPDATE_PLAYER,
   UDPDATE_MATCH,
   UPDATE_STRAT,
-  GET_CHARACTERS
+  GET_CHARACTERS,
+  GET_ROLES,
  }
