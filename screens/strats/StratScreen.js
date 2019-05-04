@@ -6,7 +6,7 @@ import {
   StyleSheet,
   FlatList
 } from 'react-native';
-import Tabs from '../../components/Tabs';
+import { Tabs } from '../../components/custom-elements';
 import MapItem from '../../components/strats/MapItem';
 import { ADD_STRAT } from '../../helpers/queries'
 
@@ -32,7 +32,7 @@ class StratScreen extends React.Component {
     let strat = this.props.global.lineup.strats.find(strat => strat.map === map._id)
     if(!strat) {
       //Add Strat
-      await this.props.global.requester(ADD_STRAT, {map: mapId})
+      await this.props.global.requester(ADD_STRAT, {map: map._id})
     }
     this.props.navigation.navigate('Map', {
       mapId: map._id,
@@ -41,6 +41,7 @@ class StratScreen extends React.Component {
   }
 
   render() {
+    console.log(this.props.global)
     let mapsData = this.props.global.maps.filter(map => map.mapTypes.includes(this.state.mapType))
     
 
@@ -100,6 +101,7 @@ export default withGlobalContext(StratScreen)
 
 const styles = StyleSheet.create({
     container: {
+      paddingVertical: 10
     },
   });
   

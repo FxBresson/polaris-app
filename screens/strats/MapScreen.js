@@ -5,16 +5,22 @@ import {
   StyleSheet,
   Image,
   View,
-  Text,
   TextInput,
   Button,
   SectionList,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 import StratPhase from '../../components/strats/StratPhase';
-import { Overlay, Avatar } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 import { Formik } from 'formik';
-import { UPDATE_STRAT } from '../../helpers/queries'
+import { UPDATE_STRAT } from '../../helpers/queries';
+import Colors from '../../constants/Colors';
+
+import { Text, Overlay } from '../../components/custom-elements';
+
+
+const dimensionWidth = Dimensions.get('window').width;
 
 class MapScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -103,9 +109,6 @@ class MapScreen extends React.Component {
 
         <Overlay
           isVisible={this.state.isOverlayVisible}
-          windowBackgroundColor="rgba(255, 255, 255, .5)"
-          width="auto"
-          height="auto"
           onBackdropPress={() => this.setState({ isOverlayVisible: false })}
         >
           <Formik
@@ -128,17 +131,14 @@ class MapScreen extends React.Component {
 
         <Overlay
           isVisible={this.state.isOverlayCharacterVisible}
-          windowBackgroundColor="rgba(255, 255, 255, .5)"
-          width="auto"
-          height="auto"
           onBackdropPress={() => this.setState({ isOverlayCharacterVisible: false })}
         >
           <SectionList
             renderItem={({item, index, section}) => {
               return (
-                <TouchableOpacity key={index} onPress={() => this.updateCharacter(item._id)}>
+                <TouchableOpacity key={index} style={styles.characterItem} onPress={() => this.updateCharacter(item._id)}>
                   <Avatar
-                      style={styles.charac}
+                      style={styles.characterItemAvatar}
                       rounded
                       source={{uri: item.img}}
                     />
@@ -147,7 +147,7 @@ class MapScreen extends React.Component {
               )
             }}
             renderSectionHeader={({section: {title}}) => (
-              <Text style={{fontWeight: 'bold'}}>{title}</Text>
+              <Text bold style={styles.roleSection}>{title}</Text>
             )}
             sections={this.charactersData}
             keyExtractor={(item, index) => item._id + index}
@@ -156,12 +156,11 @@ class MapScreen extends React.Component {
 
         <Image
           source={{ uri: map.thumbnail }}
-          style={styles.hero}
-          resizeMode="cover"
+          style={styles.heroCover}
+          resizeMode={'cover'}
         />
 
         <View>
-          <Text>{map.name}</Text>
           <Text>{strat.comments}</Text>
         </View>
 
@@ -195,16 +194,22 @@ const styles = StyleSheet.create({
       marginTop: -80
     },
     heroCover: {
+      width: dimensionWidth,
+      height: dimensionWidth/1.6 
     },
-    hero: {
-      flex: 1,
-      width: undefined,
-      height: undefined
+    characterItem: {
+      flexDirection:'row',
+      marginBottom: 5,
+      alignItems: 'center'
     },
-    charac: {
+    characterItemAvatar: {
+      marginRight: 5,
       width: 40,
-      height: 40,
-      marginRight: 5
+      height: 40
+    },
+    roleSection: {
+      marginTop: 10,
+      marginBottom: 5
     }
   });
   

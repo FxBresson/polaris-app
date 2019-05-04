@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
+import React, { Component } from 'react';
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { Avatar } from 'react-native-elements';
+import Colors from '../../constants/Colors';
+import { Text } from '../custom-elements';
 
 export default class StratPhase extends Component {
 
@@ -16,18 +18,21 @@ export default class StratPhase extends Component {
     const comps = this.props.comps.map((comp, i) => {
       return (
         <View style={styles.slide} key={i}>
-          <Text>{comp.name}</Text>
+          <View style={styles.compTitle}><Text>{comp.name}</Text></View>
           <View style={styles.compLine}>
             {comp.characters.map((charac, j) => {
               return (
                 <TouchableOpacity style={styles.charac} key={j} onPress={() => this.props.updateCharacter(comp._id, j)}>
                   {charac === null ?
-                    <View  ><Text>+</Text></View>
+                    <View  
+                      style={[styles.characAvatar, styles.addCharacBtn]}
+                    >
+                      <Text h2 bold>+</Text>
+                    </View>
                   :
-                    <Avatar
-                      style={styles.charac}
-                      rounded
+                    <Image 
                       source={{uri:this.props.charactersList.find(c => c._id === charac).img}}
+                      style={styles.characAvatar}
                     />
                   }
                 </TouchableOpacity>
@@ -42,19 +47,34 @@ export default class StratPhase extends Component {
         <View style={styles.slide} key={comps.length}>
           <TouchableOpacity
             onPress={() => this.props.openOverlay()}
-            style={styles.addCompBtn}
+            style={[styles.characAvatar, styles.addCharacBtn]}
           >
-            <Text>+</Text>
+            <Text h2 bold>+</Text>
           </TouchableOpacity>
         </View>
     )
     
     return (
       <View style={styles.phaseContainer}>
-        <Text>{this.props.phaseName}</Text>
-          <Swiper style={styles.wrapper} showsButtons={true} height={100}>
+        <View style={styles.phaseNameContainer}>
+          <Text bold>{this.props.phaseName}</Text>
+        </View>
+        <View style={styles.swiperWrapper}>
+          <Swiper 
+            showsButtons={true} 
+            height={120}
+            buttonWrapperStyle={{
+              paddingVertical: 0,
+              height: 30,
+            }}
+            paginationStyle={{
+              bottom: 5,
+            }}
+            activeDotColor={Colors.white}
+          >
             {[...comps, addCompSlide].map(i => i)}
           </Swiper>
+        </View>
       </View>
     )
   }
@@ -62,30 +82,44 @@ export default class StratPhase extends Component {
 
 const styles = StyleSheet.create({
   phaseContainer: {
-    backgroundColor: 'lightblue',
     marginBottom: 20
   },
-  wrapper: {
-    
+  phaseNameContainer: {
+    backgroundColor: Colors.navyBlue,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    paddingVertical: 5,
+    paddingHorizontal: 20
+  },
+  swiperWrapper: {
+    backgroundColor: Colors.opacityNavyBlue,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+
   },
   slide: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  addCompBtn: {
-    width: 48,
-    height: 48,
-    backgroundColor: 'salmon',
-    justifyContent: 'center',
-    alignItems: 'center',
+  compTitle: {
+    height: 40,
+    justifyContent: 'center'
   },
   compLine: {
+    flex: 1,
     flexDirection: 'row'
   },
-  charac: {
-    width: 40,
-    height: 40,
+  characAvatar: {
+    width: 50, 
+    height: 50, 
+    borderRadius: 50,
     marginRight: 5
+  },
+  addCharacBtn: {
+    backgroundColor: Colors.navyBlue,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
+
 })
