@@ -3,24 +3,24 @@ import {
   Text,
   StyleSheet
 } from 'react-native';
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 
 const CustomText = (props) => {
 
   const sizes = {
     h1: 24,
-    h2: 16,
+    h2: 18,
+    h3: 16,
     regular: 14
   }
 
   let fontSize = sizes.regular
 
   for (const key in props) {
-    if (props.hasOwnProperty(key) && props[key] && sizes[key]) {
+    if (props.hasOwnProperty(key) && props[key] && sizes.hasOwnProperty(key)) {
       fontSize = sizes[key]
     }
   }
-
 
   const styles = StyleSheet.create({
     text: {
