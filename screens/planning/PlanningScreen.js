@@ -3,25 +3,25 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  Text,
   View,
   FlatList,
-  Button,
   TextInput,
-  Picker
+  Picker,
 } from 'react-native';
 import moment from 'moment'
 import 'moment/locale/fr';
 import { withGlobalContext } from '../../components/GlobalContext'
 import MatchItem from '../../components/matchs/MatchItem';
-import { Overlay } from 'react-native-elements';
-import Tabs from '../../components/Tabs';
 import DoodleUser from '../../components/doodle/DoodleUser';
 import DoodleTeam from '../../components/doodle/DoodleTeam';
 import { Formik } from 'formik';
-import { UPDATE_PLAYER } from '../../helpers/queries'
-import DatePicker from 'react-native-datepicker'
-import { CREATE_MATCH } from '../../helpers/queries'
+import { UPDATE_PLAYER } from '../../helpers/queries';
+import DatePicker from 'react-native-datepicker';
+import { CREATE_MATCH } from '../../helpers/queries';
+
+import Colors, { navyBlue } from '../../constants/Colors';
+
+import { Text, Button, Overlay, Tabs } from '../../components/custom-elements';
 
 
 class PlanningScreen extends React.Component {
@@ -62,7 +62,6 @@ class PlanningScreen extends React.Component {
   goToMatch(match) {
       this.props.navigation.navigate('Match', {
         match_id: match._id,
-        match_name: moment(match.date).format(`[${match.type}] lll`)
       });
   }
 
@@ -83,9 +82,6 @@ class PlanningScreen extends React.Component {
       <View style={styles.container}>
         <Overlay
           isVisible={this.state.isOverlayVisible}
-          windowBackgroundColor="rgba(255, 255, 255, .5)"
-          width="auto"
-          height="auto"
           onBackdropPress={() => this.setState({ isOverlayVisible: false })}
         >
           <Formik
@@ -94,34 +90,27 @@ class PlanningScreen extends React.Component {
           >
             {props => (
               <View>
+                <Text bold style={styles.label}>{`Date & heure`}</Text>
                 <DatePicker
-                  style={{width: 200}}
+                  style={{backgroundColor: Colors.textColor, marginBottom: 10}}
                   date={props.values.date}
+                  showIcon={false}
                   mode="datetime"
                   placeholder="Select date"
-                  format="DD-MM-YYYY hh:mm"
+                  format="DD-MM-YYYY HH:mm"
                   is24Hour={true}
                   minDate="03-02-2018"
                   confirmBtnText="Confirm"
                   cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      position: 'absolute',
-                      left: 0,
-                      top: 4,
-                      marginLeft: 0
-                    },
-                    dateInput: {
-                      marginLeft: 36
-                    }
-                    // ... You can check the source to find the other keys.
-                  }}
+
                   onDateChange={props.handleChange('date')}
                 />
 
+                <Text bold style={styles.label}>Type</Text>
                 <Picker
                   selectedValue={props.values.type}
-                  style={{height: 50, width: 100}}
+                  itemStyle={{color: Colors.textColor}}
+                  style={{height: 50, width: '100%', color: Colors.textColor}}
                   onValueChange={props.handleChange('type')}
                 > 
                   <Picker.Item label="Scrim" value="Scrim" />
@@ -129,18 +118,18 @@ class PlanningScreen extends React.Component {
                   <Picker.Item label="Ranked" value="Ranked" />
                 </Picker>
 
-                <Button onPress={props.handleSubmit} title="Submit" />
+                <Button onPress={props.handleSubmit}>
+                  <Text>Submit</Text>
+                </Button>
               </View>
             )}
           </Formik>
         </Overlay>
 
         <View>
-          <View>
-            <Text>Mes disponibilités</Text>
+          <View style={styles.doodleWeekContainer}>
             <DoodleUser 
               weekNumber={date.week()}
-              name={this.props.global.user.name}
               weekIndex={7}
               weekAvailability={this.props.global.user.doodle.slice(7, 14)}
               updateDoodle={(newStatus, i) => this.updateDoodle(newStatus, i)}
@@ -150,10 +139,9 @@ class PlanningScreen extends React.Component {
             />  
           </View>  
 
-          <View>
+          <View style={styles.doodleWeekContainer}>
             <DoodleUser 
               weekNumber={(date.week()+1)}
-              name={this.props.global.user.name}
               weekIndex={14}
               weekAvailability={this.props.global.user.doodle.slice(14, 21)}
               updateDoodle={(newStatus, i) => this.updateDoodle(newStatus, i)}
@@ -186,7 +174,8 @@ class PlanningScreen extends React.Component {
 
         {!this.state.isMatchListHistory &&
           <Button
-            title="+"
+            style={styles.addMatchButton}
+            addButton
             onPress={() => this.setState({ isOverlayVisible: true })}
           />
         }
@@ -200,6 +189,18 @@ export default withGlobalContext(PlanningScreen)
 
 const styles = StyleSheet.create({
   container: {
+    paddingVertical: 10
   },
+  doodleWeekContainer: {
+    marginBottom: 10
+  },
+  label: {
+    marginBottom: 5
+  },
+  addMatchButton: {
+    width: '33%',
+    alignSelf: 'center',
+    marginTop: 20
+  }
 });
   

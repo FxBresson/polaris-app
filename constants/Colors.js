@@ -1,3 +1,5 @@
+const white = '#FFFFFF'
+
 export default {
   navyBlue: '#000066',
   opacityNavyBlue: 'rgba(0, 0, 102, 0.5)',
@@ -11,7 +13,8 @@ export default {
     to: 'rgba(0, 204, 255, 0.7)'
   },
 
-  textColor: '#FFFFFF',
+  textColor: white,
+  white: white,
   
   checkboxYes: '#00DD16',
   checkboxMaybe: '#EDD500',
