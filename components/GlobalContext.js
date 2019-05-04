@@ -16,6 +16,7 @@ import {
   UPDATE_STRAT,
   GET_CHARACTERS,
   GET_ROLES,
+  UPDATE_PLAYER_DATA
 } from '../helpers/queries';
 import Colors from '../constants/Colors';
 import { LinearGradient,  } from 'expo';
@@ -35,7 +36,8 @@ export class GlobalContextProvider extends React.Component {
       lineupId: null,
       lineup: null,
       maps: null,
-      characters: null
+      characters: null,
+      roles: null
     }
 
   }
@@ -101,7 +103,11 @@ export class GlobalContextProvider extends React.Component {
             id: this.state.lineupId
           }
           let lineupData = await this.client.request(GET_LINEUP, variables)
-          return { lineup: lineupData.lineupById };
+          return { lineup: {
+            ...lineup,
+            ...lineupData.lineupById,
+            }
+          };
         }
         case 'UPDATE_LINEUP': {
           return null
@@ -110,6 +116,14 @@ export class GlobalContextProvider extends React.Component {
         case 'GET_PLAYER': {
           return null
         }
+        case UPDATE_PLAYER_DATA: {
+          let userObj = await this.client.request(UPDATE_PLAYER_DATA)
+          return { user: {
+            ...this.state.user,
+            ...userObj.updatePlayerData,
+            } 
+          }
+        }
         case UPDATE_PLAYER: {
           let variables = {
             record: {
@@ -117,7 +131,11 @@ export class GlobalContextProvider extends React.Component {
             }
           }
           let userObj = await this.client.request(UPDATE_PLAYER, variables)
-          return { user: userObj.playerUpdateById.record };
+          return { user: {
+              ...this.state.user,
+              ...userObj.playerUpdateById.record 
+            } 
+          };
         }
         case ADD_STRAT: {
           let variables = {
@@ -164,7 +182,7 @@ export class GlobalContextProvider extends React.Component {
           break;
       }
     } catch(err) {
-      console.error(err)
+      console.warn(err)
       return null;
     }
   }

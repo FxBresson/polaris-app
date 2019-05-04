@@ -22,12 +22,16 @@ const playerObj = `
     doodle
     role {
       name
+      _id
     }
     profile {
       level
       portrait
       endorsement
-      rank
+      rank {
+        date
+        srValue
+      }
       rank_img
       levelFrame
       levelStars
@@ -55,6 +59,11 @@ query getLineUp($id: MongoID!) {
   lineupById(_id: $id) {
     _id
     name
+    averageSr 
+    otherLineups {
+      name
+      averageSr
+    }
     description
     objectives
     players {
@@ -92,6 +101,26 @@ const LOGIN_PLAYER = `
 query {
   playerLogin {
 ${playerObj}
+  }
+}
+`
+
+const UPDATE_PLAYER_DATA = `
+query {
+  updatePlayerData {
+    profile {
+      level
+      portrait
+      endorsement
+      rank {
+        date
+        srValue
+      }
+      rank_img
+      levelFrame
+      levelStars
+    }
+    lastStats
   }
 }
 `
@@ -189,4 +218,5 @@ export {
   UPDATE_STRAT,
   GET_CHARACTERS,
   GET_ROLES,
+  UPDATE_PLAYER_DATA
  }
