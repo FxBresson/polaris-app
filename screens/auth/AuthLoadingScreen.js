@@ -40,7 +40,8 @@ class AuthLoadingScreen extends React.Component {
   async componentDidMount() {
     // LOAD ASSETS
     await Asset.loadAsync([
-      require('../../assets/images/background.jpg')
+      require('../../assets/images/background.jpg'),
+      require('../../assets/images/logo.png')
       // require('../assets/images/robot-prod.png'),
     ]),
     await Font.loadAsync({
@@ -125,9 +126,15 @@ class AuthLoadingScreen extends React.Component {
             <Text>Loading Data</Text>
           </View>
         }
+
+        {this.state.loginError &&
+          <Text style={styles.error}>{this.state.loginError}</Text>
+        }
         
         {this.state.needLogin &&
-          <Button onPress={() => this.handleOAuthLogin()} title="LOGIN"></Button>
+          <Button onPress={() => this.handleOAuthLogin()}>
+            <Text>Login</Text>
+          </Button>
         }
 
         {this.props.global.user &&
@@ -150,4 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingTop: Platform.OS === 'ios' ? 20 : 0
   },
+  error: {
+    color: 'red'
+  }
 });
