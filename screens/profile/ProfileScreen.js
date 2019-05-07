@@ -4,11 +4,19 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Picker
+  Picker,
+  Dimensions
 } from 'react-native';
 import {
   Avatar, Image,
 } from 'react-native-elements';
+
+import {
+  LineChart,
+} from 'react-native-chart-kit'
+
+import moment from 'moment';
+import 'moment/locale/fr';
 
 import { Text, Button } from '../../components/custom-elements';
 import Colors from '../../constants/Colors';
@@ -82,6 +90,18 @@ class ProfileScreen extends React.Component {
     const user = this.props.global.user
 
     const characs = user.lastStats.top_heroes.quickplay.played.slice(0, 5)
+
+    const data = {
+      labels: user.profile.rank.map((item) => moment(item.date).format('D/YY')).reverse(),
+      datasets: [{
+        data: user.profile.rank.map((item) => item.srValue).reverse(),
+      }]
+    }
+    const chartConfig = {
+      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity*2})`,
+      withInnerLines: false,
+      decimalPlaces: 0
+    }
     
     return (
       <View style={styles.container}>
@@ -151,7 +171,21 @@ class ProfileScreen extends React.Component {
           <View></View>
         }
 
-      <Button onPress={() => this.logout()}>
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text h2>Ranking Evolution</Text>
+          </View>
+
+          <View style={styles.rankedChart}>
+            <LineChart 
+              data={data}
+              width={Dimensions.get('window').width-10}
+              height={220}
+              chartConfig={chartConfig}
+            />
+        </View>
+        </View>
+
         <Text>Logout</Text>
       </Button>
         
@@ -234,6 +268,14 @@ const styles = StyleSheet.create({
   },
   favHeroes: {
     flexDirection: 'row'
+  },
+  rankedChart: {
+    borderRadius: 25,
+    backgroundColor: Colors.opacityNavyBlue,
+    paddingVertical: 10,
+    paddingRight: 10,
+    textAlign: 'center',
+    alignItems: 'center'
   },
 });
   
