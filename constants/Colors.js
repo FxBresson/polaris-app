@@ -18,4 +18,7 @@ export default {
   
   checkboxYes: '#00DD16',
   checkboxMaybe: '#EDD500',
+
+  tabSelected: white,
+  tabDefault: 'rgba(255, 255, 255, 0.5)'
 };

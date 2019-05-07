@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
-import TabBarIcon from '../components/TabBarIcon';
+import TabBarIcon from '../components/custom-elements/TabBarIcon';
 
 import {
   HomeScreen
@@ -48,7 +48,14 @@ const HomeStack = createStackNavigator({
   ...headerStyle
 })
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home'
+  tabBarLabel: 'Home',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      library={'AntDesign'}
+      name={'home'}
+    />
+  ),
 };
 
 /*
@@ -61,6 +68,13 @@ const LineupStack = createStackNavigator({
 });
 LineupStack.navigationOptions = {
   tabBarLabel: 'Lineup',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      library={'Feather'}
+      name={'user'}
+    />
+  ),
 };
 
 /*
@@ -75,6 +89,13 @@ const PlanningStack = createStackNavigator({
 });
 PlanningStack.navigationOptions = {
   tabBarLabel: 'Planning',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      library={'AntDesign'}
+      name={'calendar'}
+    />
+  ),
 }
 
 /*
@@ -89,6 +110,13 @@ const StratStack = createStackNavigator({
 });
 StratStack.navigationOptions = {
   tabBarLabel: 'Strats',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      library={'MaterialCommunityIcons'}
+      name={'target'}
+    />
+  ),
 };
 
 /*
@@ -101,6 +129,13 @@ const ProfileStack = createStackNavigator({
 });
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      library={'Feather'}
+      name={'user'}
+    />
+  ),
 };
 
 // const SettingsStack = createStackNavigator({
@@ -110,6 +145,7 @@ ProfileStack.navigationOptions = {
 //   tabBarIcon: ({ focused }) => (
 //     <TabBarIcon
 //       focused={focused}
+//       library={'Feather'}
 //       name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
 //     />
 //   ),
@@ -117,7 +153,7 @@ ProfileStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  LineupStack,
+  // LineupStack,
   PlanningStack,
   StratStack,
   ProfileStack
@@ -126,5 +162,8 @@ export default createBottomTabNavigator({
     style: {
       backgroundColor: Colors.navyBlue,
     },
+    activeTintColor: Colors.tabSelected,
+    inactiveTintColor: Colors.tabDefault,
+    
   }
 });
