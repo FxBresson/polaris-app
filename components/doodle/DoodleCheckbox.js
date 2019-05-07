@@ -63,8 +63,7 @@ export default class DoodleCheckbox extends Component {
               onPress={() => this.toggleStatus()}
               style={this.styles.checkboxTouchableZone}
           >
-              <View style={checkboxStyle}></View>
-
+            <View style={checkboxStyle}></View>
           </TouchableOpacity>
         :
           <View style={this.styles.checkboxTouchableZone}>

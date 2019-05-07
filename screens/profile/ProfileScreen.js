@@ -22,6 +22,7 @@ import { Text, Button } from '../../components/custom-elements';
 import Colors from '../../constants/Colors';
 
 import { UPDATE_PLAYER } from '../../helpers/queries';
+import DoodleCheckbox from '../../components/doodle/DoodleCheckbox';
 
 class ProfileScreen extends React.Component {
   
@@ -183,11 +184,36 @@ class ProfileScreen extends React.Component {
               height={220}
               chartConfig={chartConfig}
             />
-        </View>
+          </View>
         </View>
 
-        <Text>Logout</Text>
-      </Button>
+       
+
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text h2>{'Paramètres'}</Text>
+          </View>
+
+          <View style={styles.paramLine}>
+            <Text>Default Availability</Text>
+            <DoodleCheckbox
+              dispoState={this.state.userTemp.defaultAvailability != undefined ? this.state.userTemp.defaultAvailability : user.defaultAvailability }
+              onStateChange={(newValue) => {
+                this.setState({userTemp: {
+                  ...this.state.userTemp,
+                  defaultAvailability: newValue
+                }})
+              }}
+              touchable={this.state.editingMode}
+            />
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Button onPress={() => this.logout()} style={{width: 110}}>
+            <Text>Logout</Text>
+          </Button>
+        </View>
         
       </View>
     );
@@ -256,7 +282,8 @@ const styles = StyleSheet.create({
   },
   section: {
     alignItems: 'center',
-    marginTop: 20
+    marginTop: 30,
+    width: '100%'
   },
   sectionHeader: {
     paddingVertical: 7,
@@ -277,5 +304,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center'
   },
+  paramLine: {
+    width: '80%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    backgroundColor: Colors.opacityNavyBlue,
+    borderRadius: 40,
+    height: 40,
+  }
 });
   

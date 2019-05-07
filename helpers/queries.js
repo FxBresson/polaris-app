@@ -37,6 +37,7 @@ const playerObj = `
       levelStars
     }
     lastStats
+    defaultAvailability
 `
 
 const matchObj = `
