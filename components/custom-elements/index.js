@@ -5,10 +5,12 @@ Tabs.Button = TabButton;
 import Button from './Button';
 import Overlay from './Overlay';
 import Text from './Text';
+import Icon from './Icon';
 
 export { 
   Tabs,
   Button,
   Overlay,
-  Text
+  Text,
+  Icon
  };

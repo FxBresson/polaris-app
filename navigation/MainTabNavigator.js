@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
-import TabBarIcon from '../components/custom-elements/TabBarIcon';
+import { Icon } from '../components/custom-elements';
 
 import {
   HomeScreen
@@ -50,7 +50,8 @@ const HomeStack = createStackNavigator({
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
+    <Icon
+      tabBarIcon
       focused={focused}
       library={'AntDesign'}
       name={'home'}
@@ -69,7 +70,8 @@ const LineupStack = createStackNavigator({
 LineupStack.navigationOptions = {
   tabBarLabel: 'Lineup',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
+    <Icon
+      tabBarIcon
       focused={focused}
       library={'Feather'}
       name={'user'}
@@ -90,7 +92,8 @@ const PlanningStack = createStackNavigator({
 PlanningStack.navigationOptions = {
   tabBarLabel: 'Planning',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
+    <Icon
+      tabBarIcon
       focused={focused}
       library={'AntDesign'}
       name={'calendar'}
@@ -111,7 +114,8 @@ const StratStack = createStackNavigator({
 StratStack.navigationOptions = {
   tabBarLabel: 'Strats',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
+    <Icon
+      tabBarIcon
       focused={focused}
       library={'MaterialCommunityIcons'}
       name={'target'}
@@ -130,7 +134,8 @@ const ProfileStack = createStackNavigator({
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
+    <Icon
+      tabBarIcon
       focused={focused}
       library={'Feather'}
       name={'user'}
