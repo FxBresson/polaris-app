@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { Avatar } from 'react-native-elements';
-import { Text } from '../custom-elements';
+import { Text, Icon } from '../custom-elements';
 import Colors from '../../constants/Colors';
 
 
@@ -42,7 +42,11 @@ export default class MapItem extends Component {
           </View>
         </View>
         <View style={styles.btn}>
-          <Text h2>></Text>
+          <Icon
+            library={'SimpleLineIcons'}
+            name={'arrow-right'}
+            size={12}
+          />
         </View>
       </TouchableOpacity>
     )

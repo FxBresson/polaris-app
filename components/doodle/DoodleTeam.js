@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import DoodleLine from './DoodleLine';
 import Colors from '../../constants/Colors';
-import { Text } from '../custom-elements';
+import { Text, Icon } from '../custom-elements';
 
 export default class DoodleTeam extends Component {
 
@@ -25,6 +25,12 @@ export default class DoodleTeam extends Component {
           style={[styles.teamBtn, this.state.isExpanded ? styles.teamBtnExpanded : {}]}
         >
           <Text>L'équipe</Text>
+          <Icon
+            library={'SimpleLineIcons'}
+            name={this.state.isExpanded ? 'arrow-up' : 'arrow-down'}
+            size={12}
+            style={styles.carret}
+          />
         </TouchableOpacity>
         {this.state.isExpanded && 
           <View style={styles.doodleTeamContainer}>
@@ -47,6 +53,7 @@ export default class DoodleTeam extends Component {
 
 const styles = StyleSheet.create({
   teamBtn: {
+    flexDirection: 'row',
     justifyContent:'center',
     alignItems: 'center',
     height: 30,
@@ -57,6 +64,10 @@ const styles = StyleSheet.create({
   teamBtnExpanded: {
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
+  },
+  carret: {
+    marginLeft: 5,
+    marginTop: 3
   },
   doodleTeamContainer: {
     backgroundColor: Colors.opacityNavyBlue,

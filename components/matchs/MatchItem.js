@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/fr';
 import Colors from '../../constants/Colors';
-import { Text } from '../custom-elements';
+import { Text, Icon } from '../custom-elements';
 
 export default class MatchItem extends Component {
 
@@ -69,7 +69,11 @@ export default class MatchItem extends Component {
           }
         </View>
         <View style={this.styles.btn}>
-          <Text h2>></Text>
+          <Icon
+            library={'SimpleLineIcons'}
+            name={'arrow-right'}
+            size={12}
+          />
         </View>
       </TouchableOpacity>
     )
