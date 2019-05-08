@@ -71,11 +71,11 @@ class PlanningScreen extends React.Component {
 
     let thisWeekTeamValue = this.props.global.lineup.players.map(player => ({
       name: player.name,
-      doodle: player.doodle.slice(7, 14)
+      doodle: player.doodle.slice(0, 7)
     }))
     let nextWeekTeamValue = this.props.global.lineup.players.map(player => ({
       name: player.name,
-      doodle: player.doodle.slice(14, 21)
+      doodle: player.doodle.slice(7, 14)
     }))
 
     return (
@@ -130,8 +130,8 @@ class PlanningScreen extends React.Component {
           <View style={styles.doodleWeekContainer}>
             <DoodleUser 
               weekNumber={date.week()}
-              weekIndex={7}
-              weekAvailability={this.props.global.user.doodle.slice(7, 14)}
+              weekIndex={0}
+              weekAvailability={this.props.global.user.doodle.slice(0, 7)}
               updateDoodle={(newStatus, i) => this.updateDoodle(newStatus, i)}
             />
             <DoodleTeam 
@@ -142,8 +142,8 @@ class PlanningScreen extends React.Component {
           <View style={styles.doodleWeekContainer}>
             <DoodleUser 
               weekNumber={(date.week()+1)}
-              weekIndex={14}
-              weekAvailability={this.props.global.user.doodle.slice(14, 21)}
+              weekIndex={7}
+              weekAvailability={this.props.global.user.doodle.slice(7, 14)}
               updateDoodle={(newStatus, i) => this.updateDoodle(newStatus, i)}
             />
             <DoodleTeam 
