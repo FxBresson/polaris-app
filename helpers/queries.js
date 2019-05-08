@@ -21,7 +21,8 @@ const playerObj = `
     status
     doodle
     role {
-      name
+      name,
+      img
       _id
     }
     profile {
@@ -74,6 +75,7 @@ query getLineUp($id: MongoID!) {
       doodle
       role {
         name
+        img
       }
     }
     strats {

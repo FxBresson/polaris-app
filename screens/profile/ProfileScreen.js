@@ -11,6 +11,7 @@ import {
   Avatar, Image,
 } from 'react-native-elements';
 
+import { imgFromApi } from '../../helpers'; 
 import {
   LineChart,
 } from 'react-native-chart-kit'
@@ -142,7 +143,10 @@ class ProfileScreen extends React.Component {
                 {this.props.global.roles.map((role, i) => <Picker.Item key={i} label={role.name} value={role._id} />)}
               </Picker>
               :
+                <>
+                  <Image source={{uri: imgFromApi(user.role.img)}} style={styles.roleImage} />
               <Text h2 italic>{user.role.name}</Text>
+                </>
             }
             
             
