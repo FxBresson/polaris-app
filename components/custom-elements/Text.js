@@ -11,7 +11,7 @@ const CustomText = (props) => {
     h1: 24,
     h2: 18,
     h3: 16,
-    regular: 14
+    regular: 14,
   }
 
   let fontSize = sizes.regular
@@ -28,12 +28,18 @@ const CustomText = (props) => {
       fontSize: fontSize,
       fontWeight: props.bold ? 'bold' : 'normal',
       fontStyle: props.italic ? 'italic' : 'normal',
-      ...props.style
+    },
+    sup: {
+      fontSize: 10,
+      marginTop: -(fontSize/2),
+      marginLeft: 3
     }
   })
 
+  let appliedStyles = [styles.text, props.sup ? styles.sup : {}, props.style]
+
   return (
-    <Text {...props} style={styles.text}>
+    <Text {...props} style={StyleSheet.flatten(appliedStyles)}>
       {props.children}
     </Text>
   )

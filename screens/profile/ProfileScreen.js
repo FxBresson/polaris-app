@@ -122,7 +122,10 @@ class ProfileScreen extends React.Component {
           <View style={[styles.infoChip, styles.infoChipRank]}>
             <Image style={styles.infoImg} source={{ uri: user.profile.rank_img }} />
             {user.profile.rank.length && user.profile.rank[0].srValue ?
+                <>
               <Text h2 italic>{user.profile.rank[0].srValue}</Text>
+                <Text h2 sup italic>SR</Text>
+                </>
             :
               <Text h2 italic>Not ranked yet</Text>
             }

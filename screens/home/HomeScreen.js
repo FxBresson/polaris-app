@@ -34,7 +34,10 @@ class HomeScreen extends React.Component {
         <Text h1>{lineupData.name}</Text>
         <View style={styles.srContainer}>
           {lineupData.averageSr ?
+            <>
             <Text h1 italic>{lineupData.averageSr}</Text>
+            <Text h1 sup italic>SR</Text>
+            </>
           :
             <Text h1 italic>No data</Text>
           }
