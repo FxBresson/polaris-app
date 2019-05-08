@@ -104,11 +104,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 75
   },
   srContainer: {
-    backgroundColor: Colors.navyBlue,
+    backgroundColor: Colors.opacityNavyBlue,
     borderRadius: 44,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    flexDirection: 'row'
   },
   nextMatch: {
     height: 38,
@@ -117,6 +118,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: Colors.opacityNavyBlue,
+    backgroundColor: Colors.navyBlue,
   }
 });

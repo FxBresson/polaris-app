@@ -23,6 +23,7 @@ export default withGlobalContext(LineupScreen)
 
 const styles = StyleSheet.create({
     container: {
+      paddingVertical: 10
     },
   });
   

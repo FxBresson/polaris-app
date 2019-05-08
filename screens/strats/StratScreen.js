@@ -41,10 +41,8 @@ class StratScreen extends React.Component {
   }
 
   render() {
-    console.log(this.props.global)
     let mapsData = this.props.global.maps.filter(map => map.mapTypes.includes(this.state.mapType))
     
-
     return (
       <View style={styles.container}>
 

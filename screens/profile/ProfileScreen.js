@@ -12,6 +12,7 @@ import {
 } from 'react-native-elements';
 
 import { imgFromApi } from '../../helpers'; 
+
 import {
   LineChart,
 } from 'react-native-chart-kit'
@@ -108,52 +109,63 @@ class ProfileScreen extends React.Component {
     return (
       <View style={styles.container}>
       
-        <View style={styles.avatarContainer}>
+        <View style={styles.section}>
+          <View style={styles.avatarContainer}>
+            <Image style={styles.avatar} source={{ uri: user.profile.portrait }} />
+            <Image style={styles.levelBorder} source={{ uri: user.profile.levelFrame }} />
+            <Image style={styles.leverStars} source={{ uri: user.profile.levelStars }} />
+          </View>
 
-          <Image style={styles.avatar} source={{ uri: user.profile.portrait }} />
-
-          <Image style={styles.levelBorder} source={{ uri: user.profile.levelFrame }} />
-          <Image style={styles.leverStars} source={{ uri: user.profile.levelStars }} />
+          <Text h1 bold italic>{user.mainBtag}</Text>
         </View>
 
-        <Text h1 bold italic>{user.mainBtag}</Text>
-
-        <View style={styles.infosLine}>
-          <View style={[styles.infoChip, styles.infoChipRank]}>
-            <Image style={styles.infoImg} source={{ uri: user.profile.rank_img }} />
-            {user.profile.rank.length && user.profile.rank[0].srValue ?
+        <View style={styles.section}>
+          <View style={styles.infosLine}>
+            <View style={[styles.infoChip, styles.infoChipRank]}>
+              {user.profile.rank.length && user.profile.rank[0].srValue ?
                 <>
-              <Text h2 italic>{user.profile.rank[0].srValue}</Text>
+                {user.profile.rank_img ?
+                  <Image style={styles.infoImg} source={{ uri: user.profile.rank_img }} />
+                  :
+                  <View style={{paddingRight: 10}}></View>
+                }
+                <Text h2 italic>{user.profile.rank[0].srValue}</Text>
                 <Text h2 sup italic>SR</Text>
                 </>
-            :
-              <Text h2 italic>Not ranked yet</Text>
-            }
-          </View>
-          <Image style={[styles.infoImg, styles.infoLineCenter]} source={{ uri: user.profile.icon }} resizeMode={'cover'} />
-          <View style={styles.infoChip}>
-            {this.state.editingMode ?
-              <Picker
-                selectedValue={this.state.userTemp.role || user.role._id}
-                itemStyle={{color: Colors.textColor}}
-                style={{height: 50, width: 100, color: Colors.textColor}}
-                onValueChange={(itemValue, itemIndex) =>
-                  this.setState({userTemp: {
-                    ...this.state.userTemp,
-                    role: itemValue
-                  }})
-                }>
-                {this.props.global.roles.map((role, i) => <Picker.Item key={i} label={role.name} value={role._id} />)}
-              </Picker>
               :
+                <Text h2 italic>Not ranked yet</Text>
+              }
+            </View>
+            
+            <Image style={[styles.infoImg, styles.infoLineCenter]} source={{ uri: user.profile.icon }} resizeMode={'cover'} />
+            
+            <View style={styles.infoChip}>
+              {this.state.editingMode ?
+                <Picker
+                  selectedValue={this.state.userTemp.role || user.role._id}
+                  itemStyle={{color: Colors.textColor}}
+                  style={{height: 50, width: 100, color: Colors.textColor}}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState({userTemp: {
+                      ...this.state.userTemp,
+                      role: itemValue
+                    }})
+                  }>
+                  {this.props.global.roles.map((role, i) => <Picker.Item key={i} label={role.name} value={role._id} />)}
+                </Picker>
+                :
                 <>
                   <Image source={{uri: imgFromApi(user.role.img)}} style={styles.roleImage} />
-              <Text h2 italic>{user.role.name}</Text>
+                  <Text h2 italic>{user.role.name}</Text>
                 </>
-            }
-            
-            
+              }
+            </View>
+          </View>
 
+          <View style={[styles.infosLine, {marginBottom: 0}]}> 
+            <View style={[styles.infoChip, {width: '100%'}]}>
+                <Text h2>{user.status.join(' - ')}</Text>
+            </View>
           </View>
         </View>
 
@@ -171,13 +183,7 @@ class ProfileScreen extends React.Component {
           </View>
         </View>
        
-
-        {user.status.includes('Founder') &&
-          <View></View>
-        }
-        {user.status.includes('Captain') &&
-          <View></View>
-        }
+        
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -195,26 +201,28 @@ class ProfileScreen extends React.Component {
         </View>
 
        
+        {this.state.editingMode &&
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text h2>{'Paramètres'}</Text>
+            </View>
 
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text h2>{'Paramètres'}</Text>
+            <View style={styles.paramLine}>
+              <Text>Default Availability</Text>
+              <DoodleCheckbox
+                dispoState={this.state.userTemp.defaultAvailability != undefined ? this.state.userTemp.defaultAvailability : user.defaultAvailability }
+                onStateChange={(newValue) => {
+                  this.setState({userTemp: {
+                    ...this.state.userTemp,
+                    defaultAvailability: newValue
+                  }})
+                }}
+                touchable={this.state.editingMode}
+              />
+            </View>
           </View>
+        }
 
-          <View style={styles.paramLine}>
-            <Text>Default Availability</Text>
-            <DoodleCheckbox
-              dispoState={this.state.userTemp.defaultAvailability != undefined ? this.state.userTemp.defaultAvailability : user.defaultAvailability }
-              onStateChange={(newValue) => {
-                this.setState({userTemp: {
-                  ...this.state.userTemp,
-                  defaultAvailability: newValue
-                }})
-              }}
-              touchable={this.state.editingMode}
-            />
-          </View>
-        </View>
 
         <View style={styles.section}>
           <Button onPress={() => this.logout()} style={{width: 110}}>
@@ -232,12 +240,12 @@ export default withGlobalContext(ProfileScreen)
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 10,
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   avatarContainer: {
     width: 250,
     height: 250,
-    marginTop: -40
+    marginTop: -50,
   },
   avatar: {
     width: 120,
@@ -259,9 +267,17 @@ const styles = StyleSheet.create({
     top: 125,
   },
   infosLine: {
+    width: '100%',
+    paddingHorizontal: 40,
     flexDirection: 'row',
-    marginTop: 15
+    justifyContent: 'space-between',
+    marginBottom: 15
   },
+  roleImage: {
+    width: 20,
+    height: 20,
+    marginRight: 10
+  },  
   infoChip: {
     height: 40,
     justifyContent: 'center',
@@ -279,7 +295,7 @@ const styles = StyleSheet.create({
   },  
   infoImg: {
     height: 40,
-    width: 40,
+    width: 40
   },
   characAvatar: {
     width: 50, 
@@ -289,8 +305,8 @@ const styles = StyleSheet.create({
   },
   section: {
     alignItems: 'center',
-    marginTop: 30,
-    width: '100%'
+    marginBottom: 30,
+    width: '100%',
   },
   sectionHeader: {
     paddingVertical: 7,
