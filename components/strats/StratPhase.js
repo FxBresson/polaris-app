@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { Avatar } from 'react-native-elements';
 import Colors from '../../constants/Colors';
-import { Text } from '../custom-elements';
+import { Text, Icon } from '../custom-elements';
 
 export default class StratPhase extends Component {
 
@@ -64,6 +64,7 @@ export default class StratPhase extends Component {
             showsButtons={true} 
             height={120}
             buttonWrapperStyle={{
+              marginTop: 5,
               paddingVertical: 0,
               height: 30,
             }}
@@ -71,6 +72,20 @@ export default class StratPhase extends Component {
               bottom: 5,
             }}
             activeDotColor={Colors.white}
+            nextButton={
+              <Icon
+                library={'SimpleLineIcons'}
+                name={'arrow-right'}
+                size={18}
+              />
+            }
+            prevButton={
+              <Icon
+                library={'SimpleLineIcons'}
+                name={'arrow-left'}
+                size={18}
+              />
+            }
           >
             {[...comps, addCompSlide].map(i => i)}
           </Swiper>

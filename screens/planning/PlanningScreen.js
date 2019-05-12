@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   View,
   FlatList,
-  TextInput,
   Picker,
 } from 'react-native';
 import moment from 'moment'
@@ -126,7 +125,7 @@ class PlanningScreen extends React.Component {
           </Formik>
         </Overlay>
 
-        <View>
+        <View style={styles.section}>
           <View style={styles.doodleWeekContainer}>
             <DoodleUser 
               weekNumber={date.week()}
@@ -196,6 +195,9 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 5
+  },
+  section: {
+    marginBottom: 20
   },
   addMatchButton: {
     width: '33%',

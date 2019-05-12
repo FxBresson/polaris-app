@@ -15,6 +15,7 @@ import { GET_MAPS, GET_LINEUP, GET_CHARACTERS, GET_ROLES, UPDATE_PLAYER, UPDATE_
 import { Text, Button } from '../../components/custom-elements';
 
 import { withGlobalContext } from '../../components/GlobalContext';
+import Colors from '../../constants/Colors';
 
 class AuthLoadingScreen extends React.Component {
   static navigationOptions = {
@@ -121,15 +122,21 @@ class AuthLoadingScreen extends React.Component {
       <View style={styles.container}>
         {this.state.isLoadingResources &&
           <View>
-            <ActivityIndicator/>
-            <Text>Loading Assets</Text>
+            <ActivityIndicator
+            color={Colors.white}
+            size={'large'}
+            />
+            <Text h3 style={styles.message}>Loading Assets</Text>
           </View>
         }
 
         {this.state.isLoadingData &&
-          <View>
-            <ActivityIndicator/>
-            <Text>Loading Data</Text>
+          <View style={styles.message}>
+            <ActivityIndicator
+            color={Colors.white}
+            size={'large'}
+            />
+            <Text h3 style={styles.message}>Loading Data</Text>
           </View>
         }
 
@@ -144,11 +151,13 @@ class AuthLoadingScreen extends React.Component {
         }
 
         {this.props.global.user &&
-          (this.state.newLogin ?
-          <Text>Welcome {this.props.global.user.mainBtag}</Text>
-          :
-          <Text>Welcome back {this.props.global.user.mainBtag}</Text>
-          )
+          <View style={styles.message}>
+            {this.state.newLogin ?
+              <Text h2>Welcome {this.props.global.user.mainBtag}</Text>
+            :
+              <Text h2>Welcome back {this.props.global.user.mainBtag}</Text>
+            }
+          </View>
         }
       </View>
     );
@@ -159,11 +168,13 @@ export default withGlobalContext(AuthLoadingScreen)
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: Platform.OS === 'ios' ? 20 : 0
+    paddingTop: 180,
+    alignItems: 'center'
   },
   error: {
     color: 'red'
+  },
+  message: {
+    marginTop: 20
   }
 });

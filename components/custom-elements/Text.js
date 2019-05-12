@@ -30,7 +30,7 @@ const CustomText = (props) => {
       fontStyle: props.italic ? 'italic' : 'normal',
     },
     sup: {
-      fontSize: 10,
+      fontSize: fontSize/2,
       marginTop: -(fontSize/2),
       marginLeft: 3
     }

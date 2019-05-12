@@ -6,7 +6,6 @@ import {
   Image,
   View,
   TextInput,
-  Button,
   SectionList,
   TouchableOpacity,
   Dimensions
@@ -17,7 +16,7 @@ import { Formik } from 'formik';
 import { UPDATE_STRAT } from '../../helpers/queries';
 import Colors from '../../constants/Colors';
 
-import { Text, Overlay } from '../../components/custom-elements';
+import { Text, Overlay, Button } from '../../components/custom-elements';
 
 
 const dimensionWidth = Dimensions.get('window').width;
@@ -121,9 +120,12 @@ class MapScreen extends React.Component {
                   onChangeText={props.handleChange('compName')}
                   onBlur={props.handleBlur('compName')}
                   value={props.values.compName}
-                  placeholder={'name'}
+                  placeholder={'Nom'}
+                  style={styles.input}
                 />
-                <Button onPress={props.handleSubmit} title="Submit" />
+                <Button onPress={props.handleSubmit}>
+                  <Text>Ajouter</Text>
+                </Button>
               </View>
             )}
           </Formik>
@@ -195,7 +197,8 @@ const styles = StyleSheet.create({
     },
     heroCover: {
       width: dimensionWidth,
-      height: dimensionWidth/1.6 
+      height: dimensionWidth/1.6,
+      marginBottom: 15
     },
     characterItem: {
       flexDirection:'row',
@@ -210,6 +213,12 @@ const styles = StyleSheet.create({
     roleSection: {
       marginTop: 10,
       marginBottom: 5
-    }
+    },
+    input: {
+      color: Colors.white,
+      fontSize: 18,
+      marginBottom: 20,
+      width: 150
+    },
   });
   

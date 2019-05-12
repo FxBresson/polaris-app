@@ -12,7 +12,7 @@ import { Formik } from 'formik';
 import { UDPDATE_MATCH } from '../../helpers/queries';
 import Colors from '../../constants/Colors';
 
-import { Text, Button, Overlay } from '../../components/custom-elements';
+import { Text, Button, Overlay, Icon } from '../../components/custom-elements';
 
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -101,7 +101,7 @@ class MatchScreen extends React.Component {
           onBackdropPress={() => this.setState({ isOverlayVisible: false })}
         >
           <Formik
-            initialValues={{ score: '', enemyScore: '', map: '' }}
+            initialValues={{ score: '', enemyScore: '', map: this.props.global.maps[0]._id }}
             onSubmit={values => this.addMap(values)}
           >
             {props => (
@@ -109,10 +109,9 @@ class MatchScreen extends React.Component {
                 <Picker
                   selectedValue={props.values.map}
                   itemStyle={{color: Colors.textColor}}
-                  style={{height: 50, width: 20, color: Colors.textColor}}
+                  style={{height: 50, width: 200, color: Colors.textColor}}
                   onValueChange={props.handleChange('map')}
                 > 
-                  <Picker.Item label={"Select Map"} value={''} />
                   {this.props.global.maps.map((map, i) => {
                     return (
                       <Picker.Item key={map._id} label={map.name} value={map._id} />
@@ -125,7 +124,8 @@ class MatchScreen extends React.Component {
                   value={props.values.score}
                   maxLength={2}
                   keyboardType={'numeric'}
-                  placeholder={'0'}
+                  placeholder={'Score'}
+                  style={styles.input}
                 />
                 <TextInput
                   onChangeText={props.handleChange('enemyScore')}
@@ -133,10 +133,11 @@ class MatchScreen extends React.Component {
                   value={props.values.enemyScore}
                   maxLength={2}
                   keyboardType={'numeric'}
-                  placeholder={'0'}
+                  placeholder={'Score adversaire'}
+                  style={styles.input}
                 />
-                <Button onPress={props.handleSubmit}>
-                  <Text>Submit</Text>
+                <Button onPress={props.handleSubmit} style={styles.submitBtn}>
+                  <Text>Ajouter</Text>
                 </Button>
               </View>
             )}
@@ -150,7 +151,10 @@ class MatchScreen extends React.Component {
 
         <View style={styles.matchScoreContainer}>
           <View style={styles.scoreContainer}>
-            <Text h2 italic>{match.teamSr}</Text>
+            <View style={styles.srContainer}>
+              <Text h2 italic>{match.teamSr || this.props.global.lineup.averageSr}</Text>
+              <Text h2 italic sup>SR</Text>
+            </View>
             <Text bold style={styles.matchScoreText}>{score}</Text>
           </View>
           <View style={styles.centralContainer}>
@@ -158,18 +162,33 @@ class MatchScreen extends React.Component {
           </View>
           <View style={styles.scoreContainer}>
             {this.state.editingMode ?
-              <TextInput
-                value={this.state.matchTemp.sr !== undefined ? this.state.matchTemp.sr : JSON.stringify(match.sr)}
-                onChangeText={(text) =>
-                  this.setState({matchTemp: {
-                    ...this.state.matchTemp,
-                    sr: text
-                }})}
-                maxLength={4}
-                keyboardType={'numeric'}
-              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  value={this.state.matchTemp.sr !== undefined ? this.state.matchTemp.sr : match.sr !== null ? JSON.stringify(match.sr) : "0000"}
+                  onChangeText={(text) =>
+                    this.setState({matchTemp: {
+                      ...this.state.matchTemp,
+                      sr: text
+                  }})}
+                  maxLength={4}
+                  keyboardType={'numeric'}
+                  style={styles.input}
+                />
+                <Icon
+                  library={'Feather'}
+                  name={'edit-3'}
+                  size={18}
+                />
+              </View>
               :
-              <Text h2 italic>{match.sr}</Text>
+              <View style={styles.srContainer}>
+                {match.sr &&
+                <>
+                  <Text h2 italic>{match.sr}</Text>
+                  <Text h2 italic sup>SR</Text>
+                </>
+                }
+              </View>
             }
             <Text bold style={styles.matchScoreText}>{enemyScore}</Text>
           </View>
@@ -286,6 +305,22 @@ const styles = StyleSheet.create({
     mapScoreText: {
       fontSize: 36
     },
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center'
+    },
+    input: {
+      color: Colors.white,
+      marginRight: 3,
+      fontSize: 18
+    },
+    submitBtn: {
+      marginTop: 10
+    },
+    srContainer: {
+      flexDirection: 'row',
+      alignItems: 'center'
+    }
     
   });
   

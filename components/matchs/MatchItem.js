@@ -57,7 +57,7 @@ export default class MatchItem extends Component {
         style={this.styles.matchItem}
       >
         <View style={this.styles.infoColumn}>
-          <Text>{moment(this.props.date).format('L HH:mm')}</Text>
+          <Text>{moment(this.props.date).format('L - HH:mm')}</Text>
           {this.props.sr &&
             <Text>{this.props.sr}</Text>
           }

@@ -51,8 +51,10 @@ class HomeScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Image source={require('../../assets/images/logo.png')} style={styles.logo} resizeMode={'contain'} />
-        <Text h1 italic style={styles.welcome}>Bienvenue {this.props.global.user.name} </Text>
+        <View style={styles.welcomeContainer}>
+          <Image source={require('../../assets/images/logo.png')} style={styles.logo} resizeMode={'contain'} />
+          <Text h1 italic style={styles.welcome}>Bienvenue {this.props.global.user.name} </Text>
+        </View>
         <View style={styles.lineupsContainer}>
           {this.renderLineup(this.props.global.lineup)}
           {this.props.global.lineup.otherLineups.map((lineup, i) => {
@@ -63,7 +65,7 @@ class HomeScreen extends React.Component {
           <View style={styles.nextMatch}>
           {nextMatch ?
             <>
-              <Text h2>{moment(nextMatch.date).format('L HH:mm')}</Text>
+              <Text h2>{moment(nextMatch.date).format('L - HH:mm')}</Text>
               <Text h2>{nextMatch.type}</Text>
             </>
             :
@@ -82,7 +84,10 @@ export default withGlobalContext(HomeScreen)
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    alignItems: 'center',
+    // alignItems: 'center',
+  },
+  welcomeContainer: {
+    alignItems: 'center'
   },
   logo: {
     width: 175,
@@ -115,6 +120,7 @@ const styles = StyleSheet.create({
     height: 38,
     borderRadius: 38,
     paddingHorizontal: 20,
+    marginHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

@@ -91,13 +91,13 @@ class ProfileScreen extends React.Component {
 
   render() {
     const user = this.props.global.user
-
     const characs = user.lastStats.top_heroes.quickplay.played.slice(0, 5)
+    const dataset = user.profile.rank.slice(0, 7)
 
     const data = {
-      labels: user.profile.rank.map((item) => moment(item.date).format('D/YY')).reverse(),
+      labels: dataset.map((item) => moment(item.date).format('D/YY')).reverse(),
       datasets: [{
-        data: user.profile.rank.map((item) => item.srValue).reverse(),
+        data: dataset.map((item) => item.srValue).reverse(),
       }]
     }
     const chartConfig = {
@@ -137,7 +137,7 @@ class ProfileScreen extends React.Component {
               }
             </View>
             
-            <Image style={[styles.infoImg, styles.infoLineCenter]} source={{ uri: user.profile.icon }} resizeMode={'cover'} />
+            {/* <Image style={[styles.infoImg, styles.infoLineCenter]} source={{ uri: user.profile.icon }} resizeMode={'cover'} /> */}
             
             <View style={styles.infoChip}>
               {this.state.editingMode ?
@@ -187,7 +187,7 @@ class ProfileScreen extends React.Component {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text h2>Ranking Evolution</Text>
+            <Text h2>Évolution du rang</Text>
           </View>
 
           <View style={styles.rankedChart}>
@@ -208,7 +208,7 @@ class ProfileScreen extends React.Component {
             </View>
 
             <View style={styles.paramLine}>
-              <Text>Default Availability</Text>
+              <Text>Disponibilité par défaut</Text>
               <DoodleCheckbox
                 dispoState={this.state.userTemp.defaultAvailability != undefined ? this.state.userTemp.defaultAvailability : user.defaultAvailability }
                 onStateChange={(newValue) => {
