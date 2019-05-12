@@ -51,6 +51,19 @@ export default class MatchItem extends Component {
   
 
   render() {
+
+    let score = [0, 0, 0]
+    if(!!this.props.result.length) {
+      for (const map of this.props.result) {
+        if(map.score > map.enemyScore)
+          score[0]++
+        if(map.score < map.enemyScore)
+          score[1]++
+        if(map.score === map.enemyScore)
+          score[2]++
+      }
+    }
+
     return (
       <TouchableOpacity
         onPress={this.props.goToMatch}
@@ -63,9 +76,9 @@ export default class MatchItem extends Component {
           }
         </View>
         <View style={[this.styles.infoColumn, this.styles.rightColumn]}>
-          <Text>{this.props.type}</Text>
-          {this.props.score &&
-            <Text>{this.props.score}</Text>
+          <Text bold>{this.props.type}</Text>
+          {!!this.props.result.length &&
+            <Text>{score.join('-')}</Text>
           }
         </View>
         <View style={this.styles.btn}>
