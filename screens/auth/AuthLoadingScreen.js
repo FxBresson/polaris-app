@@ -16,6 +16,7 @@ import { Text, Button } from '../../components/custom-elements';
 
 import { withGlobalContext } from '../../components/GlobalContext';
 import Colors from '../../constants/Colors';
+import { API_URL } from '../../config';
 
 class AuthLoadingScreen extends React.Component {
   static navigationOptions = {
@@ -67,7 +68,7 @@ class AuthLoadingScreen extends React.Component {
   async handleOAuthLogin() {
     // gets the app's deep link
     let redirectUrl = await Linking.getInitialURL()
-    let authUrl = `https://polarisapi.serveo.net/auth/bnet?url=${encodeURIComponent(redirectUrl)}`
+    let authUrl = `${API_URL}/auth/bnet?url=${encodeURIComponent(redirectUrl)}`
     try {
       const loginState = await WebBrowser.openAuthSessionAsync(authUrl, redirectUrl)
 
