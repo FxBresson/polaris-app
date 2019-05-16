@@ -94,7 +94,7 @@ class ProfileScreen extends React.Component {
     let characs = [];
     let dataset = []
     if (user.lastStats) {
-      charcs = user.lastStats.top_heroes.quickplay.played.slice(0, 5)
+      characs = user.lastStats.top_heroes.quickplay.played.slice(0, 5)
       dataset = user.profile.rank.slice(0, 7)
     }
 

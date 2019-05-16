@@ -110,8 +110,8 @@ class AuthLoadingScreen extends React.Component {
       await this.props.global.requester(GET_CHARACTERS)
       await this.props.global.requester(GET_ROLES)
       this.props.navigation.navigate('Main')
-      // await this.props.global.requester(UPDATE_PLAYER_DATA)
-      // this.props.global.requester(GET_LINEUP)
+      await this.props.global.requester(UPDATE_PLAYER_DATA)
+      this.props.global.requester(GET_LINEUP)
     } catch(err) {
       console.warn(err)
       this.setState({ error: true })
