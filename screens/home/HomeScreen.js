@@ -62,7 +62,7 @@ class HomeScreen extends React.Component {
           })}
         </View>
         <View>
-          <View style={styles.nextMatch}>
+          <View style={nextMatch ? styles.nextMatch : StyleSheet.flatten([styles.nextMatch, styles.noNextMatch])}>
           {nextMatch ?
             <>
               <Text h2>{moment(nextMatch.date).format('L - HH:mm')}</Text>
@@ -125,5 +125,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: Colors.navyBlue,
+  },
+  noNextMatch: {
+    justifyContent: 'center',
   }
 });

@@ -91,8 +91,12 @@ class ProfileScreen extends React.Component {
 
   render() {
     const user = this.props.global.user
-    const characs = user.lastStats.top_heroes.quickplay.played.slice(0, 5)
-    const dataset = user.profile.rank.slice(0, 7)
+    let characs = [];
+    let dataset = []
+    if (user.lastStats) {
+      charcs = user.lastStats.top_heroes.quickplay.played.slice(0, 5)
+      dataset = user.profile.rank.slice(0, 7)
+    }
 
     const data = {
       labels: dataset.map((item) => moment(item.date).format('D/YY')).reverse(),
@@ -105,7 +109,7 @@ class ProfileScreen extends React.Component {
       withInnerLines: false,
       decimalPlaces: 0
     }
-    
+
     return (
       <View style={styles.container}>
       
@@ -142,7 +146,7 @@ class ProfileScreen extends React.Component {
             <View style={styles.infoChip}>
               {this.state.editingMode ?
                 <Picker
-                  selectedValue={this.state.userTemp.role || user.role._id}
+                  selectedValue={this.state.userTemp.role || (user.role !== null ? user.role._id : '')}
                   itemStyle={{color: Colors.textColor}}
                   style={{height: 50, width: 100, color: Colors.textColor}}
                   onValueChange={(itemValue, itemIndex) =>
@@ -154,10 +158,12 @@ class ProfileScreen extends React.Component {
                   {this.props.global.roles.map((role, i) => <Picker.Item key={i} label={role.name} value={role._id} />)}
                 </Picker>
                 :
+                user.role && (
                 <>
                   <Image source={{uri: imgFromApi(user.role.img)}} style={styles.roleImage} />
                   <Text h2 italic>{user.role.name}</Text>
                 </>
+                )
               }
             </View>
           </View>
@@ -184,21 +190,22 @@ class ProfileScreen extends React.Component {
         </View>
        
         
+        {dataset.length > 0 && 
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text h2>Évolution du rang</Text>
+            </View>
 
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text h2>Évolution du rang</Text>
+            <View style={styles.rankedChart}>
+              <LineChart 
+                data={data}
+                width={Dimensions.get('window').width-10}
+                height={220}
+                chartConfig={chartConfig}
+              />
+            </View>
           </View>
-
-          <View style={styles.rankedChart}>
-            <LineChart 
-              data={data}
-              width={Dimensions.get('window').width-10}
-              height={220}
-              chartConfig={chartConfig}
-            />
-          </View>
-        </View>
+        }
 
        
         {this.state.editingMode &&

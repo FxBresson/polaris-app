@@ -121,6 +121,9 @@ class AuthLoadingScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+
+        <Image source={require('../../assets/images/logo.png')} style={styles.logo} resizeMode={'contain'} />
+
         {this.state.isLoadingResources &&
           <View>
             <ActivityIndicator
@@ -146,8 +149,8 @@ class AuthLoadingScreen extends React.Component {
         }
         
         {this.state.needLogin &&
-          <Button style={{marginTop: 40}} onPress={() => this.handleOAuthLogin()}>
-            <Text>Login</Text>
+          <Button style={styles.loginBtn} onPress={() => this.handleOAuthLogin()}>
+            <Text h1>Login</Text>
           </Button>
         }
 
@@ -177,5 +180,15 @@ const styles = StyleSheet.create({
   },
   message: {
     marginTop: 20
+  },
+  logo: {
+    width: 175,
+    height: 154,
+    marginBottom: 20
+  },
+  loginBtn: {
+    marginTop: 40,
+    width: 200,
+    height: 40
   }
 });
